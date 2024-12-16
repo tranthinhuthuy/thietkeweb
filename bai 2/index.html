@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        .logo{
+            text-align: center;
+            font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        .screen{
+            text-align: right;
+        }
+
+        .container{
+
+            background-color: rgb(255, 255, 255);
+            box-shadow: 2px 2px 6px rgb(34, 34, 34);
+            border: 1px solid black;
+            border-radius: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height:400px;
+            width:450px;
+            position: absolute;
+        }
+
+        .keys{
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+            padding: 10px;
+            margin: auto;
+        }
+
+        .button{
+            height: 60px;
+            padding: 5px;
+            background-color: #fff;
+            border-radius: 3px;
+            border: 1px soild #c4c4c4;
+            background-color: transparent;
+            font-size: 2rem;
+            color: #333;
+            background-image: linear-gradient(to bottom, transparent, transparent rgba(0,0,0,.04));
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), inset 0 1px 0 0 rgba(255,255,255,.45), inset 0 -1px 0 0 rgba(255,255,255,.15), 0 1px 0 0 rgba(255,255,255,rgba(255,255,255,.15));
+            text-shadow: 0 1px rgba(255,255,255,.4);
+        }
+
+        .button:hover{
+            background-color: #eaeaea;
+        }
+
+        .operator{
+            color: #fff;
+            background-color: #eebb24;
+        }
+
+        .clear{
+            background-color: #f0595f;
+            border-color: #b0353a;
+            color: #fff;
+            width: 80px;
+            height: 30px;
+        }
+        .clear:hover{
+            background-color: #f17377;
+        }
+
+        .equal-sign{
+            background-color: #25a8e0;
+            border-color: #25a8e0;
+            color: #fff;
+        }
+        .equal-sign:hover{
+            background-color: #4e9ed4;
+        }
+
+        .screen{
+            background-color: rgb(171, 219, 231);
+            justify-content: left;
+            color: black;
+            font-size: medium;
+            width: 50%;
+            height: 30%;
+            cursor: default;
+            padding: 10px;
+            padding-left: 40%;
+            margin: auto;
+            margin-bottom: 12px;
+        }
+    </style>
+    <script>
+        function display(val) {
+            document.getElementById('result').value += val;
+            return val;
+        }
+
+        function solve() {
+            let x = document.getElementById('result').value;
+            try {
+                let y = eval(x);
+                document.getElementById('result').value = y;
+            } catch (e) {
+                document.getElementById('result').value = "Error";
+            }
+            return y;
+        }
+
+        function clearScreen() {
+            document.getElementById('result').value = "";
+        }
+    </script>
+</head>
+<body>
+    <h1 class="logo">Calculator App</h1>
+    <div class="container">
+        <br>
+        <table>
+            <tr>
+                <td colspan="3"> <input type="text" id="result" class="screen"> </td>
+                <td> <input type="button" value="C" onclick="clearScreen()" class="clear"></td>
+            </tr>
+        </table>
+        <div class="keys"> 
+            <input type="button" value="7" class="button" onclick="display('7')">
+            <input type="button" value="8" class="button" onclick="display('8')">
+            <input type="button" value="9" class="button" onclick="display('9')">
+            <input type="button" value="/" class="operator" onclick="display('/')"> 
+            <input type="button" value="4" class="button" onclick="display('4')">
+            <input type="button" value="5" class="button" onclick="display('5')">
+            <input type="button" value="6" class="button" onclick="display('6')">
+            <input type="button" value="*" class="operator" onclick="display('*')"> 
+            <input type="button" value="1" class="button" onclick="display('1')">
+            <input type="button" value="2" class="button" onclick="display('2')">
+            <input type="button" value="3" class="button" onclick="display('3')">
+            <input type="button" value="-" class="operator" onclick="display('-')"> 
+            <input type="button" value="0" class="button" onclick="display('0')">
+            <input type="button" value="." class="button" onclick="display('.')">
+            <input type="button" value="=" class="button equal-sign" onclick="solve()" >
+            <input type="button" value="+" class="operator" onclick="display('+')">
+        </div>
+    </div>
+
+</body>
+</html>
