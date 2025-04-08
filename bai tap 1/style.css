@@ -1,0 +1,200 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  header {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+  }
+  
+  .logo img {
+    height: 50px;
+  }
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+  }
+  
+  .nav-links li {
+    margin-left: 25px;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding-bottom: 4px;
+  }
+  
+  .nav-links a.active,
+  .nav-links a:hover {
+    border-bottom: 2px solid teal;
+  }
+  
+  /* Hero section */
+  .hero {
+    background: url("image/header.jpg") no-repeat center center;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* overlay mờ */
+    z-index: 1;
+  }
+  
+  .hero-text {
+    z-index: 2;
+    text-align: center;
+    max-width: 700px;
+    color: white;
+    padding: 0 20px;
+  }
+  
+  .hero h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+  }
+  
+  .hero p {
+    font-size: 1.2em;
+  }
+  .survey {
+    background-color: #e0f7f7;
+    padding: 50px 20px;
+    text-align: center;
+  }
+  
+  .form-container {
+    background-color: white;
+    max-width: 600px;
+    margin: auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  
+  .form-container input,
+  .form-container select {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+  }
+  
+  .form-container button {
+    padding: 10px 20px;
+    background-color: teal;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .book {
+    background-color: #fdfdfd;
+    padding: 60px 20px;
+    text-align: left;
+  }
+  
+  .order-btn, .offer-btn {
+    padding: 12px 25px;
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin: 10px;
+    cursor: pointer;
+  }
+  
+  .note {
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  .radio-group {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    gap: 10px; 
+    margin-top: 10px;
+  }
+  
+  .radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+  }
+  .question {
+    white-space: nowrap; /* giữ nguyên dòng, không xuống hàng */
+  }
+  
+  .radio-options {
+    display: flex;
+    gap: 15px; /* khoảng cách giữa các lựa chọn */
+  }
+  .footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9rem;
+}
+.book-img img {
+  width: 300px; 
+  max-width: 100%; 
+  display: block;
+}
+.book-details {
+  text-align: right; /* chữ canh trái */
+  min-width: 400px; 
+}
+book-details p {
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+.book-details ul {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.book-details li {
+  margin-bottom: 10px;
+}
+.book-layout {
+  display: flex;
+  align-items: flex-start; 
+  justify-content: center;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto; 
+}
+.order-btn {
+  padding: 10px 20px;
+  background-color: orange;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
