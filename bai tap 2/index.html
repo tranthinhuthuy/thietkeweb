@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //cau1
+    //a
+    for (let i = 1; i <= 5; i++) {
+  console.log(i); 
+}
+
+    //b
+    const person = {
+  name: "An",
+  age: 20
+};
+person.age = 21; 
+
+console.log(person);
+
+    //cau2
+    //a
+    const nhandoi = (a, b) => { return a * b}
+    console.log(nhandoi(4,2))
+
+    //b
+    const person2 = {
+  name: "Thuy",
+  sayName() {
+    console.log(this.name); 
+  }
+};
+
+person2.sayName();
+
+    //cau3
+    //a
+    function tinhTrungBinhCong(...numbers) {
+  if (numbers.length === 0) return 0;
+  const tong = numbers.reduce((sum, num) => sum + num, 0);
+  return tong / numbers.length;
+}
+
+console.log(tinhTrungBinhCong(2, 4, 6));
+
+    //b
+    let arr1 = [3, 5, 1];
+    let arr2 = [4, 8, 2];
+
+    const Arry = {
+        arr : [1, 5, 3],
+        gop : [...arr1, ...arr2]
+    };
+    console.log(Arry)
+
+    //cau4
+    const numbers = [1, 2, 3, 4];
+    const doubled = numbers.map(num => num * 2);
+    console.log("Doubled:", doubled); // [2, 4, 6, 8]
+
+    const names = ["alice", "bob", "charlie"];
+    const capitalized = names.map(name => name.charAt(0).toUpperCase() + name.slice(1));
+    console.log("Capitalized names:", capitalized); // ["Alice", "Bob", "Charlie"]
+
+    const nums = [5, 8, 1, 10, 3];
+    const greaterThanFive = nums.filter(num => num > 5);
+    console.log("Greater than 5:", greaterThanFive);
+
+    const fruits = ["apple", "banana", "kiwi", "mango"];
+    const longWords = fruits.filter(word => word.length > 4);
+    console.log("Long words:", longWords);
+
+    const sum = [1, 2, 3, 4].reduce((total, num) => total + num, 0);
+    console.log("Sum:", sum);
+
+    const letters = ['a', 'b', 'c'];
+    const joined = letters.join('');
+    console.log("Joined string:", joined);
+
+    const nums2 = [3, 7, 11, 14];
+    const divisibleBy7 = nums2.find(num => num % 7 === 0);
+    console.log("First divisible by 7:", divisibleBy7);
+
+    const products = [
+    {name: "Laptop", price: 1000},
+    {name: "Phone", price: 600},
+    {name: "Tablet", price: 800}
+];
+const totalExpensive = products
+  .filter(product => product.price > 700)
+  .reduce((total, product) => total + product.price, 0);
+console.log("Total price > 700:", totalExpensive);
+
+    const scores = [7, 4, 9, 10, 5, 8];
+    const results = scores.map(score => score >= 5 ? "Đậu" : "Rớt");
+    console.log("Results:", results);
+
+    // Cau 5
+    //a
+    function delay(mx) {
+        return new Promise(resolve => setTimeout(resolve, mx));
+    }
+    delay(3000).then(() => {
+        console.log("Đã chờ xong");
+    });
+
+    //b
+    function delayLog(ms, message) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+            console.log(message);
+            resolve(); 
+            }, ms);
+        });
+    }
+    delayLog(1000, "Hello sau 1 giây!");
+
+    //c
+    async function gssd() {
+        await delayLog(4000, "1s trôi qua...");
+        await delayLog(4000, "2s trôi qua...");
+        await delayLog(4000, "3s trôi qua...");
+    }
+
+    function delayLog(ms, message) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+            console.log(message);
+            resolve();
+            }, ms);
+        });
+    }
+    gssd();
+</script>
