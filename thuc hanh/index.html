@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh Sách Người Dùng</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Danh Sách Người Dùng</h1>
+      <button id="add-user-btn">Thêm người dùng</button>
+    </div>
+    <div id="user-list" class="user-list"></div>
+  </div>
+
+  <!-- Modal chỉnh sửa -->
+  <div id="edit-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Chỉnh sửa người dùng</h2>
+      <form id="edit-form">
+        <label for="edit-name">Tên</label>
+        <input id="edit-name" type="text" required>
+
+        <label for="edit-email">Email</label>
+        <input id="edit-email" type="email" required>
+
+        <label for="edit-phone">Số điện thoại</label>
+        <input id="edit-phone" type="text" required>
+
+        <label for="edit-address">Địa chỉ</label>
+        <input id="edit-address" type="text" required>
+
+        <div class="actions">
+          <button type="button" id="cancel-edit">Hủy</button>
+          <button type="submit" class="btn-primary">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal thêm -->
+  <div id="add-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Thêm người dùng mới</h2>
+      <form id="add-form">
+        <label for="add-name">Tên</label>
+        <input id="add-name" type="text" required>
+
+        <label for="add-email">Email</label>
+        <input id="add-email" type="email" required>
+
+        <label for="add-phone">Số điện thoại</label>
+        <input id="add-phone" type="text" required>
+
+        <label for="add-address">Địa chỉ</label>
+        <input id="add-address" type="text" required>
+
+        <div class="actions">
+          <button type="button" id="cancel-add">Hủy</button>
+          <button type="submit" class="btn-primary">Thêm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
