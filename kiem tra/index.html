@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý công thức nấu ăn</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Quản lý công thức nấu ăn</h1>
+      <button id="add-user-btn" class="btn add-btn">Thêm công thức mới</button>
+    </div>
+    <div id="user-list" class="user-list"></div>
+  </div>
+
+  <!-- Modal chỉnh sửa -->
+  <div id="edit-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Chỉnh sửa công thức</h2>
+      <form id="edit-form">
+        <label for="edit-name">Tên công thức</label>
+        <input id="edit-name" type="text" required>
+
+        <label for="edit-email">Ẩm thực</label>
+        <input id="edit-email" type="text" required>
+
+        <label for="edit-phone">Thời gian chuẩn bị</label>
+        <input id="edit-phone" type="number" required>
+
+        <label for="edit-address">Thời gian nấu</label>
+        <input id="edit-address" type="number" required>
+
+        <label for="edit-servings">Số khẩu phần</label>
+        <input id="edit-servings" type="number" required>
+
+        <label for="edit-image">URL hình ảnh</label>
+        <input id="edit-image" type="text" required>
+
+        <div class="actions">
+          <button type="button" id="cancel-edit" class="btn cancel-btn">Hủy</button>
+          <button type="submit" class="btn-primary">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal thêm -->
+  <div id="add-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Thêm công thức mới</h2>
+      <form id="add-form">
+        <label for="add-name">Tên công thức</label>
+        <input id="add-name" type="text" required>
+
+        <label for="add-email">Ẩm thực</label>
+        <input id="add-email" type="text" required>
+
+        <label for="add-phone">Thời gian chuẩn bị</label>
+        <input id="add-phone" type="number" required>
+
+        <label for="add-address">Thời gian nấu</label>
+        <input id="add-address" type="number" required>
+
+        <label for="add-servings">Số khẩu phần</label>
+        <input id="add-servings" type="number" required>
+
+        <label for="add-image">URL hình ảnh</label>
+        <input id="add-image" type="text" required>
+
+        <div class="actions">
+          <button type="button" id="cancel-add" class="btn cancel-btn">Hủy</button>
+          <button type="submit" class="btn-primary">Thêm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
