@@ -1,0 +1,107 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f5f5;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* App container */
+.container {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-size: 3rem;
+  color: #666; /* đổi từ xanh sang xám */
+}
+
+header p {
+  color: #888;
+}
+
+/* Form input */
+form {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+form input[type="text"] {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+form button {
+  background: #888; /* đổi từ #1976d2 sang xám */
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+form button:hover {
+  background: #666; /* xám đậm khi hover */
+}
+
+/* Todo list */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fafafa;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+li input[type="checkbox"] {
+  margin-right: 1rem;
+}
+
+li span {
+  flex: 1;
+  font-size: 1rem;
+}
+
+li button {
+  background: none;
+  border: none;
+  color: #888; /* xám thay vì đỏ tươi */
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+li button:hover {
+  color: #555; /* xám đậm khi hover */
+}
