@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+
+<meta charset="UTF-8">
+<title>Chi tiết hồ sơ ứng viên</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<header class="header">
+<h1>CHI TIẾT HỒ SƠ ỨNG VIÊN</h1>
+</header>
+
+<div class="container">
+
+<div id="profileBox"></div>
+
+<br>
+
+<button class="btn" onclick="goBack()">Quay lại</button>
+
+</div>
+
+<script>
+
+let applications =
+JSON.parse(localStorage.getItem("applications")) || [];
+
+let index = localStorage.getItem("viewProfileIndex");
+
+let app = applications[index];
+
+let box = document.getElementById("profileBox");
+
+box.innerHTML = `
+
+<h3>1. THÔNG TIN CÁ NHÂN</h3>
+
+<p><b>Họ tên:</b> ${app.fullName}</p>
+<p><b>Ngày sinh:</b> ${app.dob}</p>
+<p><b>Địa chỉ:</b> ${app.address}</p>
+<p><b>SĐT:</b> ${app.phone}</p>
+<p><b>Email:</b> ${app.email}</p>
+
+<h3>2. THÔNG TIN CÔNG VIỆC</h3>
+
+<p><b>Công việc:</b> ${app.jobName}</p>
+<p><b>Địa điểm:</b> ${app.location}</p>
+<p><b>Mức lương:</b> ${app.salary}</p>
+
+<h3>3. KỸ NĂNG</h3>
+
+<p>${app.skills}</p>
+
+<h3>4. GHI CHÚ</h3>
+
+<p>${app.note}</p>
+
+`;
+
+function goBack(){
+
+window.history.back();
+
+}
+
+</script>
+
+</body>
+</html>

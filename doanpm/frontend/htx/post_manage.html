@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý tin tuyển dụng</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="dashboard-header">
+
+        <h1 class="dashboard-title">
+            Quản lý tin tuyển dụng
+        </h1>
+
+    </header>
+
+    <div class="container">
+
+        <!-- THỐNG KÊ -->
+        <section class="stats">
+
+            <div class="stat-card">
+                <h3 id="totalJobs">4</h3>
+                <p>Tổng tin</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="openJobs">2</h3>
+                <p>Đang tuyển</p>
+            </div>
+
+           <div class="stat-card">
+            <h3 id="closedJobs">2</h3>
+            <p>Sắp hết hạn / Hết hạn</p>
+</div>
+
+        </section>
+
+        <!-- THANH TÌM KIẾM -->
+        <section class="search-bar">
+
+            <input 
+                type="text"
+                id="searchInput"
+                placeholder="Tìm tiêu đề công việc..."
+            >
+
+            <select id="statusFilter">
+
+              <option value="">Trạng thái</option>
+
+                <option value="Đang tuyển">
+                    Đang tuyển
+                </option>
+
+                <option value="Đã đủ hồ sơ">
+                    Đã đủ hồ sơ
+                </option>
+
+                <option value="Sắp hết hạn">
+                    Sắp hết hạn
+                </option>
+
+                <option value="Hết hạn">
+                    Hết hạn
+                </option>
+
+            </select>
+
+            <button 
+                class="search-btn"
+                onclick="searchPost()"
+            >
+                Tìm
+            </button>
+
+            <!-- CHỈNH CHỖ NÀY -->
+            <a 
+                href="post_form.html"
+                class="add-btn"
+                onclick="goAddPost()"
+            >
+                + Đăng tin mới
+            </a>
+
+        </section>
+
+        <!-- DANH SÁCH TIN -->
+        <section class="post-list">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Tiêu đề</th>
+                        <th>Địa điểm</th>
+                        <th>Lương</th>
+                        <th>Số lượng</th>
+                        <th>Ngày đăng</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="jobTable">
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div class="footer-content">
+
+            <h3>Thông tin liên hệ</h3>
+
+            <p>
+                <strong>Hợp tác xã tại Kon Tum</strong>
+            </p>
+
+            <p>
+                Địa chỉ: 123 Phan Đình Phùng - P.Quang Trung - Kon Tum
+            </p>
+
+            <p>
+                Điện thoại: 0123 456 789
+            </p>
+
+            <p>
+                Email: tuyendung123@kontum.udn.vn
+            </p>
+
+            <p class="copyright">
+                © 2026 Hệ thống tuyển dụng việc làm thời vụ Kon Tum
+            </p>
+
+        </div>
+
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        /* LOAD DANH SÁCH JOB */
+
+        function loadJobs(){
+
+            let jobs =
+                JSON.parse(localStorage.getItem("jobs")) || [];
+
+            /* NẾU CHƯA CÓ JOB -> TẠO DỮ LIỆU MẪU */
+
+            if(jobs.length === 0){
+
+                jobs = [
+
+                    {
+                        id: 1,
+                        title: "Nhân viên sơ chế nông sản",
+                        company: "HTX Nông Sản Kon Tum",
+                        contact: "Nguyễn Văn A",
+                        email: "nongsan@gmail.com",
+                        phone: "0909123123",
+                        address: "Kon Tum",
+                        salary: "250.000đ/ngày",
+                        quantity: "5",
+                        deadline: "2026-11-25",
+                        status: "Đang tuyển"
+                    },
+
+                    {
+                        id: 2,
+                        title: "Nhân viên hái tiêu",
+                        company: "HTX Hồ Tiêu Kon Tum",
+                        contact: "Trần Văn B",
+                        email: "hotieu@gmail.com",
+                        phone: "0988888888",
+                        address: "Đăk Tô",
+                        salary: "200.000đ/ngày",
+                        quantity: "3",
+                        deadline: "2026-11-25",
+                        status: "Đã đủ hồ sơ"
+                    },
+
+                    {
+                        id: 3,
+                        title: "Đóng gói nông sản",
+                        company: "HTX Nông Sản Sạch",
+                        contact: "Lê Văn C",
+                        email: "donggoi@gmail.com",
+                        phone: "0977777777",
+                        address: "Đắk Hà",
+                        salary: "180.000đ/ngày",
+                        quantity: "5",
+                        deadline: "2026-05-12",
+                        status: "Sắp hết hạn"
+                    },
+
+                    {
+                        id: 4,
+                        title: "Thu hoạch cà phê",
+                        company: "HTX nông nhiệp Kon Tum",
+                        contact: "Phạm Văn D",
+                        email: "nongnghiep@gmail.com",
+                        phone: "0966666666",
+                        address: "Kon Tum",
+                        salary: "200.000đ/ngày",
+                        quantity: "5",
+                        deadline: "2025-11-12",
+                        status: "Hết hạn"
+                    }
+
+                ];
+
+                localStorage.setItem(
+                    "jobs",
+                    JSON.stringify(jobs)
+                );
+            }
+
+            const table =
+                document.getElementById("jobTable");
+
+            table.innerHTML = "";
+            let openCount = 0;
+let closedCount = 0;
+
+jobs.forEach(function(job){
+
+    /* ĐANG TUYỂN */
+
+    if(
+        job.status === "Đang tuyển"
+        ||
+        job.status === "Đã đủ hồ sơ"
+    ){
+
+        openCount++;
+
+    }
+
+    /* HẾT HẠN */
+
+    else if(
+        job.status === "Sắp hết hạn"
+        ||
+        job.status === "Hết hạn"
+    ){
+
+        closedCount++;
+
+    }
+
+                table.innerHTML += `
+
+                    <tr
+                        data-id="${job.id}"
+                        data-title="${job.title}"
+                        data-company="${job.company}"
+                        data-contact="${job.contact}"
+                        data-email="${job.email}"
+                        data-phone="${job.phone}"
+                        data-address="${job.address}"
+                        data-salary="${job.salary}"
+                        data-quantity="${job.quantity}"
+                        data-deadline="${job.deadline}"
+                        data-description="${job.description || ''}"
+                        data-requirement="${job.requirement || ''}"
+                        data-benefit="${job.benefit || ''}"
+                        data-document="${job.document || ''}"
+                        data-status="${job.status}"
+                    >
+
+                        <td>${job.title}</td>
+
+                        <td>${job.address}</td>
+
+                        <td>${job.salary}</td>
+
+                        <td>${job.quantity}</td>
+
+                        <td>${formatDate(job.deadline)}</td>
+
+                        <td>
+                            <span class="status ${
+                                job.status === 'Đang tuyển'
+                                ? 'open'
+                                : 'closed'
+                            }">
+                                ${job.status}
+                            </span>
+                        </td>
+
+                        <td class="actions">
+
+                            <a
+                                href="post_detail.html"
+                                class="detail"
+                                onclick="viewDetail(event, this)"
+                            >
+                                Chi tiết
+                            </a>
+
+                            <a 
+                                href="post_form.html"
+                                class="edit"
+                                onclick="editPost(event, this)"
+                            >
+                                Sửa
+                            </a>
+
+                            <button 
+                                class="delete"
+                                onclick="deletePost(this)"
+                            >
+                                Xóa
+                            </button>
+                        </td>
+                    </tr>
+                `;
+
+            });
+
+            document.getElementById("totalJobs")
+                .innerText = jobs.length;
+
+            document.getElementById("openJobs")
+                .innerText = openCount;
+
+            document.getElementById("closedJobs")
+                .innerText = closedCount;
+
+        }
+
+        /* FORMAT DATE */
+
+        function formatDate(dateString){
+
+            if(!dateString){
+
+                return "";
+
+            }
+
+            const date = new Date(dateString);
+
+            const day =
+                String(date.getDate()).padStart(2, "0");
+
+            const month =
+                String(date.getMonth() + 1).padStart(2, "0");
+
+            const year = date.getFullYear();
+
+            return `${day}/${month}/${year}`;
+
+        }
+
+        /* TÌM KIẾM */
+
+        function searchPost() {
+
+            let keyword = document
+                .getElementById("searchInput")
+                .value
+                .toLowerCase();
+
+            let status = document
+                .getElementById("statusFilter")
+                .value
+                .toLowerCase();
+
+            let rows = document
+                .querySelectorAll("#jobTable tr");
+
+            rows.forEach(function(row) {
+
+                let title = row.children[0]
+                    .innerText
+                    .toLowerCase();
+
+                let jobStatus = row.children[5]
+                    .innerText
+                    .toLowerCase();
+
+                let matchTitle =
+                    title.includes(keyword);
+
+                let matchStatus =
+                    status === "" ||
+                    jobStatus.includes(status);
+
+                if (matchTitle && matchStatus) {
+
+                    row.style.display = "";
+
+                }
+
+                else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+        /* THÊM TIN MỚI */
+
+        function goAddPost(){
+
+            localStorage.removeItem("editJob");
+
+        }
+
+        /* XEM CHI TIẾT */
+
+        function viewDetail(event, button){
+
+            event.preventDefault();
+
+            localStorage.setItem(
+                "viewJobId",
+                row.dataset.id
+            );
+
+            window.location.href =
+                "post_detail.html";
+
+        }
+
+        /* SỬA TIN */
+
+        function editPost(event, button) {
+
+            event.preventDefault();
+
+            let row = button.closest("tr");
+
+            let jobData = {
+
+                id: Number(row.dataset.id),
+
+                title: row.dataset.title,
+
+                company: row.dataset.company,
+
+                contact: row.dataset.contact,
+
+                email: row.dataset.email,
+
+                phone: row.dataset.phone,
+
+                address: row.dataset.address,
+
+                salary: row.dataset.salary,
+
+                quantity: row.dataset.quantity,
+
+                deadline: row.dataset.deadline,
+
+                description: row.dataset.description,
+
+                requirement: row.dataset.requirement,
+
+                benefit: row.dataset.benefit,
+
+                document: row.dataset.document,
+
+                status: row.dataset.status
+
+            };
+
+            localStorage.setItem(
+                "editJob",
+                JSON.stringify(jobData)
+            );
+
+            window.location.href = "post_form.html";
+
+        }
+
+        /* XÓA TIN */
+
+        function deletePost(button) {
+
+            if (confirm("Bạn có chắc muốn xóa tin này?")) {
+
+                let row = button.closest("tr");
+
+                let id =
+                    Number(row.dataset.id);
+
+                let jobs =
+                    JSON.parse(localStorage.getItem("jobs")) || [];
+
+                jobs = jobs.filter(function(job){
+
+                    return job.id !== id;
+
+                });
+
+                localStorage.setItem(
+                    "jobs",
+                    JSON.stringify(jobs)
+                );
+
+                row.remove();
+
+                loadJobs();
+
+                alert("Đã xóa tin tuyển dụng");
+
+            }
+
+        }
+
+/* LOAD DỮ LIỆU */
+
+localStorage.removeItem("jobs");
+
+loadJobs();
+    </script>
+
+</body>
+</html>
+
