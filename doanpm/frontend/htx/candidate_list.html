@@ -1,0 +1,344 @@
+<!DOCTYPE html> 
+<html lang="vi">
+<head>
+
+<meta charset="UTF-8">
+<title>Quản lý hồ sơ ứng viên</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<header class="header">
+<h1>QUẢN LÝ HỒ SƠ ỨNG VIÊN</h1>
+</header>
+
+<div class="container">
+
+<table class="candidate-table">
+
+<thead>
+
+<tr>
+
+<th>Họ tên</th>
+<th>Công việc</th>
+<th>SĐT</th>
+<th>Ngày nộp</th>
+<th>CV</th>
+<th>Trạng thái</th>
+<th>Thao tác</th>
+
+</tr>
+
+</thead>
+
+<tbody id="candidateTable"></tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let table = document.getElementById("candidateTable");
+
+let applications =
+JSON.parse(localStorage.getItem("applications")) || [];
+
+
+applications.sort((a,b)=>{
+
+let aDone =
+a.status === "Đạt" ||
+a.status === "Không đạt";
+
+let bDone =
+b.status === "Đạt" ||
+b.status === "Không đạt";
+
+/* chưa xét duyệt lên trên */
+if(!aDone && bDone){
+
+return -1;
+
+}
+
+if(aDone && !bDone){
+
+return 1;
+
+}
+
+/* mới nhất lên trên */
+return new Date(b.applyDate) - new Date(a.applyDate);
+
+});
+
+/* HIỂN THỊ DANH SÁCH */
+
+applications.forEach((app,index)=>{
+
+/* =========================
+ĐỔI MÀU THEO TRẠNG THÁI
+========================= */
+
+let rowClass = "";
+
+if(app.status === "Đạt"){
+
+rowClass = "approved-row";
+
+}
+else if(app.status === "Không đạt"){
+
+rowClass = "rejected-row";
+
+}
+else{
+
+rowClass = "pending-row";
+
+}
+
+table.innerHTML += `
+
+<tr class="${rowClass}">
+
+<td>${app.fullName}</td>
+
+<td>${app.jobName}</td>
+
+<td>${app.phone}</td>
+
+<td>${app.applyDate}</td>
+
+<td>
+
+<button class="btn"
+onclick="viewProfile(${index})">
+Xem hồ sơ
+</button>
+
+${
+app.cvFile
+? `<button class="btn" onclick="openCV(${index})">
+Xem đơn xin việc
+</button>`
+: "Không có"
+}
+
+</td>
+
+<td>
+
+${
+app.status === "Đạt"
+? `<span class="status approved-status">Đạt</span>`
+
+: app.status === "Không đạt"
+
+? `<span class="status rejected-status">Không đạt</span>`
+
+: `<span class="status pending-status">Chờ xét duyệt</span>`
+}
+
+</td>
+
+<td>
+
+<button
+class="btn"
+onclick="approve(${index})">
+Duyệt
+</button>
+
+<button
+class="btn"
+onclick="showRejectForm(${index})">
+Từ chối
+</button>
+
+
+<div
+id="rejectBox${index}"
+class="reject-box"
+style="display:none">
+
+<textarea
+id="reason${index}"
+placeholder="Nhập lý do từ chối"
+class="reject-textarea">
+</textarea>
+
+<div class="reject-actions">
+
+<button
+class="btn"
+onclick="confirmReject(${index})">
+Xác nhận
+</button>
+
+<button
+class="btn"
+onclick="cancelReject(${index})">
+Hủy
+</button>
+
+</div>
+
+</div>
+
+
+<div class="reject-result">
+
+${app.status==="Không đạt" ? "Lý do từ chối: "+app.employerFeedback : ""}
+
+</div>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+/* XEM HỒ SƠ ỨNG VIÊN */
+
+function viewProfile(index){
+
+/* lưu vị trí ứng viên cần xem */
+localStorage.setItem("viewProfileIndex", index);
+
+/* chuyển sang trang chi tiết hồ sơ */
+window.location.href = "candidate_detail.html";
+
+}
+
+/* XEM ĐƠN XIN VIỆC */
+
+function openCV(index){
+
+let applications =
+JSON.parse(localStorage.getItem("applications")) || [];
+
+let base64 = applications[index].cvFile;
+
+if(!base64){
+
+alert("Ứng viên chưa tải đơn xin việc");
+
+return;
+
+}
+
+let arr = base64.split(",");
+
+let mime = arr[0].match(/:(.*?);/)[1];
+
+let bstr = atob(arr[1]);
+
+let n = bstr.length;
+
+let u8arr = new Uint8Array(n);
+
+while(n--){
+
+u8arr[n] = bstr.charCodeAt(n);
+
+}
+
+let blob = new Blob([u8arr],{type:mime});
+
+let url = URL.createObjectURL(blob);
+
+window.open(url,"_blank");
+
+}
+
+/* DUYỆT */
+
+function approve(index){
+
+let applications =
+JSON.parse(localStorage.getItem("applications")) || [];
+
+applications[index].status = "Đạt";
+
+applications[index].employerFeedback =
+"Hồ sơ đạt. Vui lòng liên hệ HTX.";
+
+localStorage.setItem(
+"applications",
+JSON.stringify(applications)
+);
+
+location.reload();
+
+}
+
+/* HIỆN / ẨN FORM TỪ CHỐI */
+
+function showRejectForm(index){
+
+let box = document.getElementById("rejectBox"+index);
+
+if(box.style.display === "none" || box.style.display === ""){
+
+box.style.display = "block";
+
+}else{
+
+box.style.display = "none";
+
+}
+
+}
+
+/* HỦY */
+function cancelReject(index){
+
+document.getElementById(
+"rejectBox"+index
+).style.display="none";
+
+}
+
+/* XÁC NHẬN TỪ CHỐI */
+
+function confirmReject(index){
+
+let reason =
+document.getElementById("reason"+index).value;
+
+if(reason.trim()==""){
+
+alert("Vui lòng nhập lý do từ chối");
+
+return;
+
+}
+
+let applications =
+JSON.parse(localStorage.getItem("applications")) || [];
+
+applications[index].status="Không đạt";
+
+applications[index].employerFeedback=reason;
+
+localStorage.setItem(
+"applications",
+JSON.stringify(applications)
+);
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+</html>

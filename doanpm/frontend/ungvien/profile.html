@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hồ sơ cá nhân</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<script src="../js/auth.js"></script>
+
+<script>
+requireLogin("profile.html");
+</script>
+
+<header class="header">
+    <h1>Hồ sơ cá nhân ứng viên</h1>
+</header>
+
+<div class="container">
+
+    <div class="card">
+
+        <form id="profileForm">
+
+            <h2>Thông tin cơ bản</h2>
+
+            <div class="form-group required">
+                <label>Họ và tên</label>
+
+                <input
+                    type="text"
+                    id="pFullName"
+                    required
+                >
+            </div>
+
+            <div class="form-group required">
+
+                <label>Ngày sinh</label>
+
+                <input
+                    type="date"
+                    id="pDob"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group required">
+
+                <label>Giới tính</label>
+
+                <select
+                    id="pGender"
+                    required
+                >
+
+                    <option value="">
+                        -- Chọn giới tính --
+                    </option>
+
+                    <option>
+                        Nam
+                    </option>
+
+                    <option>
+                        Nữ
+                    </option>
+
+                    <option>
+                        Khác
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group required">
+
+                <label>Số điện thoại</label>
+
+                <input
+                    type="text"
+                    id="pPhone"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group required">
+
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    id="pEmail"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group required">
+
+                <label>Địa chỉ</label>
+
+                <input
+                    type="text"
+                    id="pAddress"
+                    required
+                >
+
+            </div>
+
+            <h2>Thông tin nghề nghiệp</h2>
+
+            <div class="form-group required">
+
+                <label>Nghề mong muốn</label>
+
+                <input
+                    type="text"
+                    id="pJob"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group required">
+
+                <label>Hình thức làm việc</label>
+
+                <select
+                    id="pType"
+                    required
+                >
+
+                    <option value="">
+                        -- Chọn --
+                    </option>
+
+                    <option>
+                        Toàn thời gian
+                    </option>
+
+                    <option>
+                        Bán thời gian
+                    </option>
+
+                    <option>
+                        Thời vụ
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group required">
+
+                <label>Thời gian có thể làm</label>
+
+                <select
+                    id="pTime"
+                    required
+                >
+
+                    <option value="">
+                        -- Chọn --
+                    </option>
+
+                    <option>
+                        Sáng
+                    </option>
+
+                    <option>
+                        Chiều
+                    </option>
+
+                    <option>
+                        Tối
+                    </option>
+
+                    <option>
+                        Cả ngày
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group required">
+
+                <label>Mức lương mong muốn</label>
+
+                <input
+                    type="text"
+                    id="pSalary"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Kinh nghiệm</label>
+
+                <textarea id="pExperience"></textarea>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Kỹ năng</label>
+
+                <textarea id="pSkill"></textarea>
+
+            </div>
+
+            <button
+                type="button"
+                class="btn-save"
+            >
+                Hồ sơ đã lưu tự động
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+// ===============================
+// LẤY PROFILE ĐÃ LƯU
+// ===============================
+
+let profile =
+JSON.parse(localStorage.getItem("profile")) || {};
+
+// ===============================
+// HIỂN THỊ DỮ LIỆU
+// ===============================
+
+for(let key in profile){
+
+    let element =
+    document.getElementById(key);
+
+    if(element){
+
+        element.value = profile[key];
+
+    }
+
+}
+
+// ===============================
+// CHỈ CHO XEM - KHÔNG CHO SỬA
+// ===============================
+
+document.querySelectorAll(
+    "#profileForm input, #profileForm textarea"
+).forEach(item => {
+
+    item.readOnly = true;
+
+});
+
+document.querySelectorAll(
+    "#profileForm select"
+).forEach(item => {
+
+    item.disabled = true;
+
+});
+
+</script>
+
+</body>
+</html>

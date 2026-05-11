@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Thống kê tuyển dụng</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<header class="header">
+    <h1>THỐNG KÊ TUYỂN DỤNG</h1>
+</header>
+
+<div class="container">
+
+    <!-- Thống kê tổng quan -->
+    <div class="stats-box">
+
+        <div class="box">
+            <h3>Tin tuyển dụng</h3>
+            <p id="totalJobs">0</p>
+        </div>
+
+        <div class="box">
+            <h3>Tổng ứng viên</h3>
+            <p id="totalApplicants">0</p>
+        </div>
+
+        <div class="box">
+            <h3>Chờ xét duyệt</h3>
+            <p id="totalPending">0</p>
+        </div>
+
+        <div class="box">
+            <h3>Đã duyệt</h3>
+            <p id="totalApproved">0</p>
+        </div>
+
+    </div>
+
+
+    <!-- Bảng thống kê tin tuyển dụng -->
+    <h2>Thống kê tin tuyển dụng</h2>
+
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Công việc</th>
+                <th>Số lượng cần</th>
+                <th>Ứng viên ứng tuyển</th>
+                <th>Đã duyệt</th>
+            </tr>
+        </thead>
+
+        <tbody id="jobStatsBody">
+
+            <tr>
+                <td>1</td>
+                <td>Thu hoạch cà phê</td>
+                <td>20</td>
+                <td>15</td>
+                <td>10</td>
+            </tr>
+
+            <tr>
+                <td>2</td>
+                <td>Đóng gói nông sản</td>
+                <td>10</td>
+                <td>8</td>
+                <td>5</td>
+            </tr>
+
+            <tr>
+                <td>3</td>
+                <td>Làm cỏ vườn</td>
+                <td>15</td>
+                <td>9</td>
+                <td>7</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+
+
+    <!-- Bảng thống kê ứng viên -->
+    <h2>Thống kê ứng viên</h2>
+
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Họ tên</th>
+                <th>Công việc</th>
+                <th>Số điện thoại</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+
+        <tbody id="applicantBody">
+
+            <tr>
+                <td>1</td>
+                <td>Nguyễn Văn A</td>
+                <td>Thu hoạch cà phê</td>
+                <td>0987123456</td>
+                <td class="pending">Chờ duyệt</td>
+            </tr>
+
+            <tr>
+                <td>2</td>
+                <td>Trần Thị B</td>
+                <td>Đóng gói nông sản</td>
+                <td>0912345678</td>
+                <td class="approved">Đã duyệt</td>
+            </tr>
+
+            <tr>
+                <td>3</td>
+                <td>Lê Văn C</td>
+                <td>Làm cỏ vườn</td>
+                <td>0934567890</td>
+                <td class="approved">Đã duyệt</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<script>
+
+    // ================= DỮ LIỆU TỪ LOCAL STORAGE =================
+
+    let jobs =
+        JSON.parse(localStorage.getItem("jobs")) || [
+
+        {
+            title: "Thu hoạch cà phê",
+            quantity: 20,
+            applicants: 15,
+            approved: 10
+        },
+
+        {
+            title: "Đóng gói nông sản",
+            quantity: 10,
+            applicants: 8,
+            approved: 5
+        },
+
+        {
+            title: "Làm cỏ vườn",
+            quantity: 15,
+            applicants: 9,
+            approved: 7
+        }
+
+    ];
+
+
+    let applicants =
+        JSON.parse(localStorage.getItem("applicants")) || [
+
+        {
+            name: "Nguyễn Văn A",
+            job: "Thu hoạch cà phê",
+            phone: "0987123456",
+            status: "Chờ duyệt"
+        },
+
+        {
+            name: "Trần Thị B",
+            job: "Đóng gói nông sản",
+            phone: "0912345678",
+            status: "Đã duyệt"
+        },
+
+        {
+            name: "Lê Văn C",
+            job: "Làm cỏ vườn",
+            phone: "0934567890",
+            status: "Đã duyệt"
+        }
+
+    ];
+
+    // ================= THỐNG KÊ TỔNG QUAN =================
+
+    function loadStatistics() {
+
+        document.getElementById("totalJobs").innerText =
+            jobs.length;
+
+        document.getElementById("totalApplicants").innerText =
+            applicants.length;
+
+        let pendingCount = applicants.filter(function(item) {
+
+            return item.status === "Chờ duyệt";
+
+        }).length;
+
+        let approvedCount = applicants.filter(function(item) {
+
+            return item.status === "Đã duyệt";
+
+        }).length;
+
+        document.getElementById("totalPending").innerText =
+            pendingCount;
+
+        document.getElementById("totalApproved").innerText =
+            approvedCount;
+
+    }
+
+    // ================= LOAD JOB TABLE =================
+
+    function loadJobTable() {
+
+        let tbody =
+            document.getElementById("jobStatsBody");
+
+        tbody.innerHTML = "";
+
+        jobs.forEach(function(job, index) {
+
+            tbody.innerHTML += `
+
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${job.title}</td>
+                    <td>${job.quantity}</td>
+                    <td>${job.applicants}</td>
+                    <td>${job.approved}</td>
+                </tr>
+
+            `;
+
+        });
+
+    }
+
+    // ================= LOAD APPLICANT TABLE =================
+
+    function loadApplicantTable() {
+
+        let tbody =
+            document.getElementById("applicantBody");
+
+        tbody.innerHTML = "";
+
+        applicants.forEach(function(item, index) {
+
+            let statusClass =
+                item.status === "Đã duyệt"
+                ? "approved"
+                : "pending";
+
+            tbody.innerHTML += `
+
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.job}</td>
+                    <td>${item.phone}</td>
+                    <td class="${statusClass}">
+                        ${item.status}
+                    </td>
+                </tr>
+
+            `;
+
+        });
+
+    }
+
+    // ================= TỰ ĐỘNG TÍNH ỨNG VIÊN THEO TỪNG JOB =================
+
+    function updateJobStatistics() {
+
+        jobs.forEach(function(job) {
+
+            let totalApply = applicants.filter(function(item) {
+
+                return item.job === job.title;
+
+            }).length;
+
+            let totalApproved = applicants.filter(function(item) {
+
+                return item.job === job.title &&
+                       item.status === "Đã duyệt";
+
+            }).length;
+
+            job.applicants = totalApply;
+            job.approved = totalApproved;
+
+        });
+
+    }
+
+    // ================= LƯU LẠI LOCAL STORAGE =================
+
+    localStorage.setItem(
+        "jobs",
+        JSON.stringify(jobs)
+    );
+
+    localStorage.setItem(
+        "applicants",
+        JSON.stringify(applicants)
+    );
+
+    // ================= KHỞI CHẠY =================
+
+    updateJobStatistics();
+    loadStatistics();
+    loadJobTable();
+    loadApplicantTable();
+
+</script>
+
+</body>
+</html>

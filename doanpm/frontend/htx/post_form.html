@@ -1,0 +1,228 @@
+<!DOCTYPE html>  
+<html lang="vi">
+
+<head>
+<meta charset="UTF-8">
+<title>Đăng tin tuyển dụng</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2 id="formTitle">Đăng tin tuyển dụng</h2>
+
+    <form id="postForm">
+
+        <label>Tiêu đề *</label>
+        <input type="text" id="title" required>
+
+        <label>Tên công ty *</label>
+        <input type="text" id="company" required>
+
+        <label>Người liên hệ *</label>
+        <input type="text" id="contact" required>
+
+        <label>Email *</label>
+        <input type="email" id="email" required>
+
+        <label>Điện thoại *</label>
+        <input type="text" id="phone" required>
+
+        <label>Địa điểm *</label>
+        <input type="text" id="address" required>
+
+        <label>Lương *</label>
+        <input type="text" id="salary" required>
+
+        <label>Số lượng *</label>
+        <input type="number" id="quantity" required>
+
+        <label>Ngày hết hạn *</label>
+        <input type="date" id="deadline" required>
+
+        <label>Hình ảnh</label>
+        <input type="file" id="image" accept="image/*">
+
+        <div id="previewBox" style="display:none;margin-top:10px;">
+            <img id="previewImage"
+                 style="width:200px;height:140px;object-fit:cover;border-radius:10px;">
+        </div>
+
+        <label>Mô tả *</label>
+        <textarea id="description" required></textarea>
+
+        <label>Yêu cầu *</label>
+        <textarea id="requirement" required></textarea>
+
+        <label>Quyền lợi *</label>
+        <textarea id="benefit" required></textarea>
+
+        <label>Hồ sơ *</label>
+        <textarea id="document" required></textarea>
+
+        <button type="button" onclick="confirmPost()">
+            Đăng tin
+        </button>
+
+    </form>
+
+</div>
+
+<script>
+
+let editJob = null;
+
+/* ================= QUAN TRỌNG: CHỈ 2 TRƯỜNG HỢP ================= */
+window.onload = function () {
+
+    editJob = JSON.parse(localStorage.getItem("editJob"));
+
+    // ================== TRƯỜNG HỢP 1: SỬA ==================
+    if(editJob){
+
+        document.getElementById("formTitle").innerText = "Chỉnh sửa tin tuyển dụng";
+
+        document.getElementById("title").value = editJob.title || "";
+        document.getElementById("company").value = editJob.company || "";
+        document.getElementById("contact").value = editJob.contact || "";
+        document.getElementById("email").value = editJob.email || "";
+        document.getElementById("phone").value = editJob.phone || "";
+        document.getElementById("address").value = editJob.address || "";
+        document.getElementById("salary").value = editJob.salary || "";
+        document.getElementById("quantity").value = editJob.quantity || "";
+        document.getElementById("deadline").value = editJob.deadline || "";
+        document.getElementById("description").value = editJob.description || "";
+        document.getElementById("requirement").value = editJob.requirement || "";
+        document.getElementById("benefit").value = editJob.benefit || "";
+        document.getElementById("document").value = editJob.document || "";
+
+        if(editJob.image){
+            document.getElementById("previewImage").src = editJob.image;
+            document.getElementById("previewBox").style.display = "block";
+        }
+
+    }
+
+    // ================== TRƯỜNG HỢP 2: TẠO MỚI ==================
+    else {
+        document.getElementById("postForm").reset();
+        document.getElementById("previewBox").style.display = "none";
+    }
+};
+
+
+/* ================= PREVIEW IMAGE ================= */
+document.getElementById("image").addEventListener("change", function(e){
+
+    const file = e.target.files[0];
+
+    if(file){
+
+        const reader = new FileReader();
+
+        reader.onload = function(ev){
+            document.getElementById("previewImage").src = ev.target.result;
+            document.getElementById("previewBox").style.display = "block";
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+
+
+/* ================= SAVE ================= */
+function saveJob(imageBase64 = ""){
+
+    let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+
+    // ================= UPDATE =================
+    if(editJob){
+
+        const updated = {
+            ...editJob,
+            title: document.getElementById("title").value,
+            company: document.getElementById("company").value,
+            contact: document.getElementById("contact").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            address: document.getElementById("address").value,
+            salary: document.getElementById("salary").value,
+            quantity: Number(document.getElementById("quantity").value),
+            deadline: document.getElementById("deadline").value,
+            description: document.getElementById("description").value,
+            requirement: document.getElementById("requirement").value,
+            benefit: document.getElementById("benefit").value,
+            document: document.getElementById("document").value,
+            image: imageBase64 || editJob.image
+        };
+
+        jobs = jobs.map(j => j.id === editJob.id ? updated : j);
+
+        localStorage.setItem("jobs", JSON.stringify(jobs));
+        localStorage.removeItem("editJob");
+
+        alert("Cập nhật thành công!");
+        window.location.href = "post_manage.html";
+    }
+
+    // ================= CREATE NEW =================
+    else {
+
+        const job = {
+            id: Date.now(),
+            title: document.getElementById("title").value,
+            company: document.getElementById("company").value,
+            contact: document.getElementById("contact").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            address: document.getElementById("address").value,
+            salary: document.getElementById("salary").value,
+            quantity: Number(document.getElementById("quantity").value),
+            deadline: document.getElementById("deadline").value,
+            description: document.getElementById("description").value,
+            requirement: document.getElementById("requirement").value,
+            benefit: document.getElementById("benefit").value,
+            document: document.getElementById("document").value,
+            image: imageBase64 || "",
+            applicants: 0,
+            created: new Date().toISOString()
+        };
+
+        jobs.push(job);
+
+        localStorage.setItem("jobs", JSON.stringify(jobs));
+
+        alert("Đăng tin thành công!");
+        window.location.href = "post_manage.html";
+    }
+}
+
+
+/* ================= CONFIRM ================= */
+function confirmPost(){
+
+    const form = document.getElementById("postForm");
+
+    if(!form.checkValidity()){
+        alert("Vui lòng nhập đầy đủ!");
+        form.reportValidity();
+        return;
+    }
+
+    const file = document.getElementById("image").files[0];
+
+    if(file){
+        const reader = new FileReader();
+        reader.onload = e => saveJob(e.target.result);
+        reader.readAsDataURL(file);
+    } else {
+        saveJob();
+    }
+}
+
+</script>
+
+</body>
+</html>

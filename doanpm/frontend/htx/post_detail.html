@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Chi tiết tin tuyển dụng</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="dashboard-header">
+
+        <h1 class="dashboard-title">
+            Chi tiết tin tuyển dụng
+        </h1>
+
+    </header>
+
+
+    <div class="container">
+
+        <div class="detail-card">
+
+            <h2 id="title"></h2>
+
+            <div class="detail-item">
+                <strong>Tên công ty:</strong>
+                <span id="company"></span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Người liên hệ:</strong>
+                <span id="contact"></span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Email:</strong>
+                <span id="email"></span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Số điện thoại:</strong>
+                <span id="phone"></span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Địa chỉ làm việc:</strong>
+                <span id="address"></span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Mức lương:</strong>
+                <span id="salary"></span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Số lượng tuyển:</strong>
+                <span id="quantity"></span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Ngày hết hạn:</strong>
+                <span id="deadline"></span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Trạng thái:</strong>
+                <span id="status"></span>
+            </div>
+
+            <div class="detail-box">
+
+                <h3>Mô tả công việc</h3>
+
+                <p id="description"></p>
+
+            </div>
+
+            <div class="detail-box">
+
+                <h3>Yêu cầu công việc</h3>
+
+                <p id="requirement"></p>
+
+            </div>
+
+            <div class="detail-box">
+
+                <h3>Quyền lợi</h3>
+
+                <p id="benefit"></p>
+
+            </div>
+
+            <div class="detail-box">
+
+                <h3>Hồ sơ bao gồm</h3>
+
+                <p id="document"></p>
+
+            </div>
+
+
+            <div class="detail-actions">
+
+                <a href="post_manage.html"
+                   class="back-btn">
+                    Quay lại
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* LẤY DỮ LIỆU */
+
+        const jobData =
+            JSON.parse(localStorage.getItem("detailJob"));
+
+
+
+        /* NẾU KHÔNG CÓ DỮ LIỆU */
+
+        if(!jobData){
+
+            alert("Không tìm thấy dữ liệu!");
+
+            window.location.href =
+                "post_manage.html";
+
+        }
+
+
+
+        /* FORMAT DATE */
+
+        function formatDate(dateString){
+
+            if(!dateString){
+
+                return "";
+
+            }
+
+            const date =
+                new Date(dateString);
+
+            const day =
+                String(date.getDate())
+                .padStart(2, "0");
+
+            const month =
+                String(date.getMonth() + 1)
+                .padStart(2, "0");
+
+            const year =
+                date.getFullYear();
+
+            return `${day}/${month}/${year}`;
+
+        }
+
+
+
+        /* HIỂN THỊ DỮ LIỆU */
+
+        document.getElementById("title")
+            .innerText = jobData.title || "";
+
+        document.getElementById("company")
+            .innerText = jobData.company || "";
+
+        document.getElementById("contact")
+            .innerText = jobData.contact || "";
+
+        document.getElementById("email")
+            .innerText = jobData.email || "";
+
+        document.getElementById("phone")
+            .innerText = jobData.phone || "";
+
+        document.getElementById("address")
+            .innerText = jobData.address || "";
+
+        document.getElementById("salary")
+            .innerText = jobData.salary || "";
+
+        document.getElementById("quantity")
+            .innerText = jobData.quantity || "";
+
+        document.getElementById("deadline")
+            .innerText = formatDate(jobData.deadline);
+
+        document.getElementById("status")
+            .innerText = jobData.status || "";
+
+        document.getElementById("description")
+            .innerText = jobData.description || "";
+
+        document.getElementById("requirement")
+            .innerText = jobData.requirement || "";
+
+        document.getElementById("benefit")
+            .innerText = jobData.benefit || "";
+
+        document.getElementById("document")
+            .innerText = jobData.document || "";
+
+    </script>
+
+</body>
+</html>
