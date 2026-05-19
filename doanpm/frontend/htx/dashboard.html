@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ HTX</title>
+    <link rel="stylesheet" href="../css/style.css">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+<header class="dashboard-header">
+
+    <div class="dashboard-title">
+        Trang chủ Hợp Tác Xã
+    </div>
+
+     <div class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </div>
+
+    <nav class="dashboard-menu" id="menu">
+        <a href="post_manage.html">Quản lý tin</a>
+        <a href="candidate_list.html">Xét duyệt hồ sơ</a>
+        <a href="statistics.html">Thống kê</a>
+
+        <button
+            class="menu-btn"
+            onclick="logout()"
+        >
+            Đăng xuất
+        </button>
+
+    </nav>
+
+</header>
+
+<div class="dashboard-banner">
+    <img src="../images/banner2.png" alt="Banner tuyển dụng hợp tác xã">
+</div>
+
+<div class="container">
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <i class="fa-solid fa-briefcase"></i>
+            <h3>12</h3>
+            <p>Tin tuyển dụng</p>
+        </div>
+
+        <div class="stat-card">
+            <i class="fa-solid fa-clock"></i>
+            <h3>5</h3>
+            <p>Hồ sơ chờ duyệt</p>
+        </div>
+
+        <div class="stat-card">
+            <i class="fa-solid fa-check"></i>
+            <h3>20</h3>
+            <p>Hồ sơ đã duyệt</p>
+        </div>
+
+        <div class="stat-card">
+            <i class="fa-solid fa-users"></i>
+            <h3>45</h3>
+            <p>Lượt ứng tuyển</p>
+        </div>
+
+    </div>
+
+    <div class="dashboard-section">
+
+        <h2>
+            <i class="fa-solid fa-bell"></i>
+            Hoạt động gần đây
+        </h2>
+
+        <ul class="activity-list">
+            <li>Ứng viên Nguyễn Văn A đã nộp hồ sơ</li>
+            <li>Bạn vừa đăng tin: Tuyển kỹ sư nông nghiệp</li>
+            <li>2 hồ sơ đã được duyệt hôm nay</li>
+            <li>1 tin tuyển dụng đã được cập nhật</li>
+        </ul>
+
+    </div>
+
+    <div class="dashboard-section">
+
+        <h2>
+            <i class="fa-solid fa-list"></i>
+            Tin tuyển dụng mới
+        </h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Tên công việc</th>
+                    <th>Ngày đăng</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Nhân viên thu hoạch cà phê</td>
+                    <td>25/02/2026</td>
+                    <td>
+                        <span class="status open">
+                            Đang tuyển
+                        </span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Nhân viên đóng gói</td>
+                    <td>20/02/2026</td>
+                    <td>
+                        <span class="status open">
+                            Đang tuyển
+                        </span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Kế toán HTX</td>
+                    <td>18/02/2026</td>
+                    <td>
+                        <span class="status closed">
+                            Đã đóng
+                        </span>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- ===== AUTH ===== -->
+
+<script src="../js/auth.js"></script>
+
+<script>
+
+/* ===== KIỂM TRA LOGIN ===== */
+
+// Chỉ kiểm tra đăng nhập, không kiểm tra role
+if (!isLoggedIn()) {
+    sessionStorage.setItem("redirectAfterLogin", window.location.pathname);
+    alert("Vui lòng đăng nhập trước!");
+    window.location.href = "login.html";
+}
+
+</script>
+
+<footer class="dashboard-footer">
+
+    <div class="footer-content">
+
+        <h3>Thông tin liên hệ</h3>
+
+        <p>
+            📍 Địa chỉ: 123 Phan Đình Phùng - P.Quang Trung-Kon Tum, Việt Nam
+        </p>
+
+        <p>
+            📧 Email: tuyendung123@kontum.udn.vn
+        </p>
+
+        <p>
+            📞 Điện thoại: 0123 456 789
+        </p>
+
+    </div>
+
+</footer>
+
+<script>
+
+function toggleMenu(){
+
+    const menu =
+    document.getElementById("menu");
+
+    menu.classList.toggle("active");
+
+}
+
+</script>
+
+</body>
+</html>
