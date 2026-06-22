@@ -1,0 +1,683 @@
+// ==========================
+// KHỞI TẠO
+// ==========================
+
+let editIndex = -1;
+let selectedFileName = "";
+let selectedFileData = "";
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        loadForms();
+
+        const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+        if(searchInput){
+
+            searchInput.addEventListener(
+                "input",
+                searchForms
+            );
+
+           searchInput.addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key === "Enter"){
+
+            e.preventDefault();
+
+            searchForms();
+
+        }
+
+    }
+);
+        }
+
+        const fileInput =
+        document.getElementById(
+            "formFile"
+        );
+
+        if(fileInput){
+
+            fileInput.addEventListener(
+                "change",
+                handleFileUpload
+            );
+
+        }
+
+    }
+);
+// ==========================
+// UPLOAD FILE
+// ==========================
+
+function handleFileUpload(event){
+
+    const file =
+    event.target.files[0];
+
+    if(!file)
+    return;
+
+    selectedFileName =
+    file.name;
+
+    const selectedFile =
+document.getElementById(
+    "selectedFileName"
+);
+
+if(selectedFile){
+
+    selectedFile.textContent =
+    file.name;
+
+}
+    const reader =
+    new FileReader();
+
+    reader.onload =
+    function(e){
+
+        selectedFileData =
+        e.target.result;
+
+    };
+
+    reader.readAsDataURL(file);
+
+}
+// ==========================
+// XÓA DẤU TIẾNG VIỆT
+// ==========================
+
+function removeVietnameseTones(str){
+
+    return (str || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/đ/g,"d")
+    .replace(/Đ/g,"d");
+
+}
+
+// ==========================
+// LẤY DANH SÁCH
+// ==========================
+
+function getForms(){
+
+    return JSON.parse(
+        localStorage.getItem("forms")
+    ) || [];
+
+}
+
+// ==========================
+// TẢI DỮ LIỆU
+// ==========================
+
+function loadForms(){
+
+    const forms =
+    getForms().sort(
+        (a,b) => b.id - a.id
+    );
+
+    renderTable(forms);
+
+    const total =
+    document.getElementById(
+        "totalForms"
+    );
+
+    if(total){
+
+        total.textContent =
+        forms.length;
+
+    }
+
+}
+
+// ==========================
+// HIỂN THỊ BẢNG
+// ==========================
+
+function renderTable(forms){
+
+    const table =
+    document.getElementById(
+        "formsTable"
+    );
+
+    if(!table) return;
+
+    table.innerHTML = "";
+
+    if(forms.length === 0){
+
+        table.innerHTML = `
+        <tr>
+            <td colspan="6"
+                class="not-found">
+                Chưa có biểu mẫu nào
+            </td>
+        </tr>
+        `;
+
+        return;
+    }
+
+    forms.forEach(
+        (item,index) => {
+
+        table.innerHTML += `
+        <tr>
+
+            <td>
+                ${index + 1}
+            </td>
+
+            <td>
+                ${item.name || ""}
+            </td>
+
+            <td>
+                <span class="category-tag">
+                    ${item.category || ""}
+                </span>
+            </td>
+
+            <td>
+
+                <a
+                    href="${item.fileData || "#"}"
+                    target="_blank"
+                    download="${item.fileName || ""}"
+                >
+
+                    ${item.fileName || "Không có tệp"}
+
+                </a>
+
+            </td>
+
+            <td>
+                ${item.date || ""}
+            </td>
+
+            <td>
+
+                <button
+                    class="edit-btn"
+                    onclick="editForm(${index})"
+                    title="Chỉnh sửa">
+
+                    <i class="fa-solid fa-pen"></i>
+
+                </button>
+
+                <button
+                    class="btn-delete"
+                    onclick="deleteForm(${index})"
+                    title="Xóa">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                </button>
+
+            </td>
+
+        </tr>
+        `;
+
+    });
+
+}
+
+// ==========================
+// THÊM / CẬP NHẬT BIỂU MẪU
+// ==========================
+
+function saveForm() {
+
+    const categoryInput = document.getElementById("formCategory");
+    const descriptionInput = document.getElementById("formDescription");
+
+    if (!categoryInput || !descriptionInput) {
+        console.error("Không tìm thấy formCategory hoặc formDescription");
+        alert("Lỗi giao diện biểu mẫu. Vui lòng kiểm tra lại HTML.");
+        return;
+    }
+
+    const category = categoryInput.value;
+    const description = descriptionInput.value.trim();
+
+    // Nếu có ô formName thì lấy từ đó
+    const nameInput = document.getElementById("formName");
+
+    let name = "";
+
+    if (nameInput) {
+        name = nameInput.value.trim();
+    } else {
+        // Chưa có formName thì dùng tên file làm tên biểu mẫu
+        name = selectedFileName || "";
+    }
+
+    // Kiểm tra dữ liệu
+    if (
+        name === "" ||
+        category === "" ||
+        description === ""
+    ) {
+        alert("Vui lòng nhập đầy đủ thông tin.");
+        return;
+    }
+
+    // Thêm mới bắt buộc chọn file
+    if (editIndex === -1 && !selectedFileName) {
+        alert("Vui lòng chọn tệp biểu mẫu.");
+        return;
+    }
+
+    const forms = getForms();
+    const date = new Date().toLocaleDateString("vi-VN");
+
+    // ======================
+    // THÊM MỚI
+    // ======================
+
+    if (editIndex === -1) {
+
+        forms.push({
+            id: Date.now(),
+            name: name,
+            category: category,
+            fileName: selectedFileName,
+            fileData: selectedFileData,
+            description: description,
+            date: date
+        });
+
+        alert("Thêm biểu mẫu thành công!");
+
+    }
+
+    // ======================
+    // CẬP NHẬT
+    // ======================
+
+    else {
+
+        forms[editIndex] = {
+            ...forms[editIndex],
+            name: name,
+            category: category,
+            fileName: selectedFileName || forms[editIndex].fileName,
+            fileData: selectedFileData || forms[editIndex].fileData,
+            description: description,
+            date: date
+        };
+
+        alert("Cập nhật biểu mẫu thành công!");
+
+        editIndex = -1;
+    }
+
+    // Lưu LocalStorage
+    localStorage.setItem(
+        "forms",
+        JSON.stringify(forms)
+    );
+
+    // Làm mới giao diện
+    clearForm();
+
+    closeFormModal();
+
+    loadForms();
+
+    if (typeof updateStats === "function") {
+        updateStats();
+    }
+}
+// ==========================
+// SỬA BIỂU MẪU
+// ==========================
+
+function editForm(index){
+
+    const forms =
+    getForms();
+
+    const item =
+    forms[index];
+
+    if(!item){
+        return;
+    }
+
+    document.getElementById(
+        "formName"
+    ).value =
+    item.name || "";
+
+    document.getElementById(
+        "formCategory"
+    ).value =
+    item.category || "";
+
+    document.getElementById(
+        "formDescription"
+    ).value =
+    item.description || "";
+
+    // Hiển thị tên file đã lưu
+
+    selectedFileName =
+    item.fileName || "";
+
+    selectedFileData =
+    item.fileData || "";
+    const fileInput =
+document.getElementById(
+    "formFile"
+);
+
+if(fileInput){
+
+    fileInput.value = "";
+
+}
+    const selectedFile =
+    document.getElementById(
+        "selectedFileName"
+    );
+
+    if(selectedFile){
+
+        selectedFile.textContent =
+        item.fileName ||
+        "Chưa chọn tệp";
+
+    }
+
+    editIndex = index;
+
+    const title =
+    document.getElementById(
+        "formTitle"
+    );
+
+    if(title){
+
+        title.innerHTML = `
+        <i class="fa-solid fa-pen"></i>
+        Chỉnh sửa biểu mẫu
+        `;
+
+    }
+
+    document.getElementById(
+        "formModal"
+    ).style.display =
+    "flex";
+
+}
+
+// ==========================
+// XÓA
+// ==========================
+
+function deleteForm(index){
+
+    if(
+        !confirm(
+            "Bạn có chắc muốn xóa biểu mẫu này?"
+        )
+    ){
+        return;
+    }
+
+    const forms =
+    getForms();
+
+    forms.splice(index,1);
+
+    localStorage.setItem(
+        "forms",
+        JSON.stringify(forms)
+    );
+
+    loadForms();
+
+}
+
+// ==========================
+// TÌM KIẾM BIỂU MẪU
+// ==========================
+
+function searchForms(){
+
+    const keyword =
+    removeVietnameseTones(
+
+        document
+        .getElementById(
+            "searchInput"
+        )
+        .value
+        .trim()
+
+    );
+
+    const forms =
+    getForms();
+
+    // Nếu ô tìm kiếm trống
+    if(keyword === ""){
+
+        renderTable(forms);
+
+        return;
+    }
+
+    const result =
+    forms.filter(item => {
+
+        const name =
+        removeVietnameseTones(
+            item.name || ""
+        );
+
+        const category =
+        removeVietnameseTones(
+            item.category || ""
+        );
+
+        const fileName =
+        removeVietnameseTones(
+            item.fileName || ""
+        );
+
+        const description =
+        removeVietnameseTones(
+            item.description || ""
+        );
+
+        return (
+
+            name.includes(keyword)
+
+            ||
+
+            category.includes(keyword)
+
+            ||
+
+            fileName.includes(keyword)
+
+            ||
+
+            description.includes(keyword)
+
+        );
+
+    });
+
+    // Không tìm thấy
+    if(result.length === 0){
+
+        document.getElementById(
+            "formsTable"
+        ).innerHTML = `
+        <tr>
+            <td colspan="6"
+                class="not-found">
+                Không tìm thấy biểu mẫu phù hợp
+            </td>
+        </tr>
+        `;
+
+        return;
+    }
+
+    renderTable(result);
+
+}
+
+// ==========================
+// RESET FORM
+// ==========================
+
+function clearForm(){
+
+    const formName =
+    document.getElementById(
+        "formName"
+    );
+
+    const formFile =
+    document.getElementById(
+        "formFile"
+    );
+
+    const selectedFile =
+    document.getElementById(
+        "selectedFileName"
+    );
+
+    const description =
+    document.getElementById(
+        "formDescription"
+    );
+
+    const category =
+    document.getElementById(
+        "formCategory"
+    );
+
+    if(formName){
+        formName.value = "";
+    }
+
+    if(formFile){
+        formFile.value = "";
+    }
+
+    if(selectedFile){
+        selectedFile.textContent =
+        "Chưa chọn tệp";
+    }
+
+    if(description){
+        description.value = "";
+    }
+
+    if(category){
+        category.selectedIndex = 0;
+    }
+
+    // Reset dữ liệu file upload
+
+    selectedFileData = "";
+    selectedFileName = "";
+
+}
+// ==========================
+// MODAL
+// ==========================
+
+function openFormModal(){
+
+    editIndex = -1;
+
+    clearForm();
+
+    const modal =
+    document.getElementById(
+        "formModal"
+    );
+
+    modal.style.display =
+    "flex";
+
+    const title =
+    document.getElementById(
+        "formTitle"
+    );
+
+    if(title){
+
+        title.innerHTML = `
+        <i class="fa-solid fa-file-circle-plus"></i>
+        Thêm biểu mẫu
+        `;
+
+    }
+
+}
+
+function closeFormModal(){
+
+    const modal =
+    document.getElementById(
+        "formModal"
+    );
+
+    if(modal){
+
+        modal.style.display =
+        "none";
+
+    }
+
+    clearForm();
+
+}
+window.onclick = function(event){
+
+    const modal =
+    document.getElementById(
+        "formModal"
+    );
+
+    if(event.target === modal){
+
+        closeFormModal();
+
+    }
+
+};

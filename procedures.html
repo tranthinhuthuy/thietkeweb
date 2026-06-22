@@ -1,0 +1,762 @@
+
+// CHATBOT HÀNH CHÍNH ĐĂK HÀ
+// ==============================
+
+let chatbotInitialized = false;
+
+// ==============================
+// MỞ CHATBOT
+// ==============================
+
+function openChatBot() {
+
+const box =
+    document.getElementById(
+        "chat-box"
+    );
+
+if (!box) return;
+
+box.style.display = "block";
+
+}
+// ==============================
+// ĐÓNG CHATBOT
+// ==============================
+
+function closeChatBot() {
+
+const box =
+    document.getElementById(
+        "chat-box"
+    );
+
+if (box) {
+
+    box.style.display =
+        "none";
+}
+
+}
+
+// ==============================
+// TẢI TRANG
+// ==============================
+
+document.addEventListener(
+"DOMContentLoaded",
+function () {
+
+    const icon =
+        document.getElementById(
+            "chat-icon"
+        );
+
+    const tooltip =
+        document.querySelector(
+            ".chat-tooltip"
+        );
+
+    // Click icon chatbot
+
+    if (icon) {
+
+        icon.addEventListener(
+            "click",
+            function (e) {
+
+                e.stopPropagation();
+
+                openChatBot();
+            }
+        );
+    }
+
+    // Click dòng hỗ trợ
+
+    if (tooltip) {
+
+        tooltip.addEventListener(
+            "click",
+            function (e) {
+
+                e.stopPropagation();
+
+                openChatBot();
+            }
+        );
+    }
+
+    // Enter để gửi
+
+    document.addEventListener(
+        "keypress",
+        function (e) {
+
+            if (
+                e.key === "Enter" &&
+                document.activeElement.id === "chat-input"
+            ) {
+
+                sendMessage();
+            }
+        }
+    );
+
+    // Click ngoài chatbot để đóng
+
+    document.addEventListener(
+        "click",
+        function (e) {
+
+            const box =
+                document.getElementById(
+                    "chat-box"
+                );
+
+            const icon =
+                document.getElementById(
+                    "chat-icon"
+                );
+
+            const tooltip =
+                document.querySelector(
+                    ".chat-tooltip"
+                );
+
+            if (
+                box &&
+                box.style.display === "block" &&
+                !box.contains(e.target) &&
+                icon &&
+                !icon.contains(e.target) &&
+                tooltip &&
+                !tooltip.contains(e.target)
+            ) {
+
+                closeChatBot();
+            }
+        }
+    );
+}
+
+);
+
+// ==============================
+// HIỂN THỊ TIN NHẮN
+// ==============================
+
+function addMessage(text, type) {
+
+const messages =
+    document.getElementById(
+        "chat-messages"
+    );
+
+if (!messages) return;
+
+const div =
+    document.createElement(
+        "div"
+    );
+
+div.className =
+    type + "-message";
+
+div.innerText =
+    text;
+
+messages.appendChild(
+    div
+);
+
+messages.scrollTop =
+    messages.scrollHeight;
+
+}
+
+// ==============================
+// CÂU HỎI NHANH
+// ==============================
+
+function addQuickQuestions() {
+
+    const messages =
+        document.getElementById(
+            "chat-messages"
+        );
+
+    if (!messages) return;
+
+    const wrapper =
+        document.createElement(
+            "div"
+        );
+
+    wrapper.className =
+        "quick-question";
+
+    wrapper.innerHTML = `
+
+        <button onclick="quickAsk('đăng ký khai sinh')">
+            📄 Khai sinh
+        </button>
+
+        <button onclick="quickAsk('đăng ký kết hôn')">
+            💍 Kết hôn
+        </button>
+
+        <button onclick="quickAsk('chứng thực bản sao')">
+            📑 Chứng thực
+        </button>
+
+        <button onclick="quickAsk('đất đai')">
+            🏠 Đất đai
+        </button>
+
+        <button onclick="quickAsk('giờ làm việc')">
+            🕒 Giờ làm việc
+        </button>
+
+        <button onclick="quickAsk('địa chỉ')">
+            📍 Địa chỉ
+        </button>
+
+    `;
+
+    messages.appendChild(
+        wrapper
+    );
+}
+
+// ==============================
+// CÂU HỎI NHANH
+// ==============================
+
+function quickAsk(question) {
+
+    const input =
+        document.getElementById(
+            "chat-input"
+        );
+
+    if (!input) return;
+
+    input.value =
+        question;
+
+    sendMessage();
+}
+
+// ==============================
+// GỬI TIN NHẮN
+// ==============================
+
+function sendMessage() {
+
+    const input =
+        document.getElementById(
+            "chat-input"
+        );
+
+    if (!input) return;
+
+    const text =
+        input.value.trim();
+
+    if (text === "")
+        return;
+
+    addMessage(
+        text,
+        "user"
+    );
+
+    const q =
+        text.toLowerCase();
+
+    let reply =
+        "Xin vui lòng liên hệ cán bộ hướng dẫn qua số điện thoại 0260.xxx.xxxx để được giải đáp kịp thời.";
+    // ==========================
+    // KHAI SINH
+    // ==========================
+
+    if (
+        q.includes("khai sinh")
+    ) {
+
+        reply =
+            "📄 THỦ TỤC ĐĂNG KÝ KHAI SINH\n\n" +
+            "Hồ sơ gồm:\n" +
+            "- Tờ khai đăng ký khai sinh\n" +
+            "- Giấy chứng sinh\n" +
+            "- CCCD của cha hoặc mẹ." ;
+    }
+
+    // ==========================
+    // KẾT HÔN
+    // ==========================
+
+    else if (
+        q.includes("kết hôn")
+    ) {
+
+        reply =
+            "💍 THỦ TỤC ĐĂNG KÝ KẾT HÔN\n\n" +
+            "Hồ sơ gồm:\n" +
+            "- Tờ khai đăng ký kết hôn\n" +
+            "- CCCD của hai bên nam nữ\n\n" +
+            "📍 Nộp trực tiếp tại Bộ phận Một cửa hoặc trực tuyến qua Cổng DVC.";
+    }
+
+    // ==========================
+    // CHỨNG THỰC
+    // ==========================
+
+    else if (
+        q.includes("chứng thực")
+    ) {
+
+        reply =
+            "📑 CHỨNG THỰC BẢN SAO\n\n" +
+            "Cần chuẩn bị:\n" +
+            "- Bản chính giấy tờ\n" +
+            "- Bản sao cần chứng thực." ;
+    }
+
+    // ==========================
+    // CƯ TRÚ
+    // ==========================
+
+    else if (
+        q.includes("cư trú") ||
+        q.includes("tạm trú") ||
+        q.includes("thường trú")
+    ) {
+
+        reply =
+            "🏠 THỦ TỤC CƯ TRÚ\n\n" +
+            "Hồ sơ gồm:\n" +
+            "- CCCD\n" +
+            "- Giấy tờ chứng minh nơi ở hợp pháp.";
+    }
+
+    // ==========================
+    // ĐẤT ĐAI
+    // ==========================
+
+    else if (
+        q.includes("đất") ||
+        q.includes("sổ đỏ") ||
+        q.includes("đất đai")
+    ) {
+
+        reply =
+            "🏡 THỦ TỤC ĐẤT ĐAI\n\n" +
+            "Hồ sơ thường gồm:\n" +
+            "- Đơn đề nghị\n" +
+            "- CCCD\n" +
+            "- Giấy chứng nhận quyền sử dụng đất\n" +
+            "- Các giấy tờ liên quan." ;
+    }
+
+    // ==========================
+    // HỒ SƠ GỒM NHỮNG GÌ
+    // ==========================
+
+    else if (
+        q.includes("hồ sơ gồm") ||
+        q.includes("cần giấy tờ gì") ||
+        q.includes("thành phần hồ sơ") ||
+        q.includes("chuẩn bị giấy tờ")
+    ) {
+
+        reply =
+            "📋 Vui lòng cho biết tên thủ tục cụ thể (khai sinh, kết hôn, đất đai, cư trú, chứng thực...) để tôi cung cấp thành phần hồ sơ chi tiết.";
+    }
+
+    // ==========================
+    // HỒ SƠ ĐÃ ĐẦY ĐỦ CHƯA
+    // ==========================
+
+    else if (
+        q.includes("hồ sơ đầy đủ chưa") ||
+        q.includes("có hợp lệ không") ||
+        q.includes("cần bổ sung gì")
+    ) {
+
+        reply =
+            "📋 Anh/chị vui lòng liệt kê các giấy tờ đang có. Cán bộ tiếp nhận sẽ kiểm tra và hướng dẫn bổ sung nếu còn thiếu.";
+    }
+
+    // ==========================
+    // THỜI GIAN GIẢI QUYẾT
+    // ==========================
+
+    else if (
+        q.includes("bao nhiêu ngày") ||
+        q.includes("mấy ngày") ||
+        q.includes("thời gian giải quyết")
+    ) {
+
+        reply =
+            "⏱ Thời gian giải quyết phụ thuộc từng thủ tục. Anh/chị vui lòng nêu rõ tên thủ tục để được cung cấp chính xác.";
+    }
+
+    // ==========================
+    // TRA CỨU HỒ SƠ
+    // ==========================
+
+    else if (
+        q.includes("tra cứu hồ sơ") ||
+        q.includes("tiến độ hồ sơ") ||
+        q.includes("hồ sơ của tôi")
+    ) {
+
+        reply =
+            "🔎 Để tra cứu hồ sơ, anh/chị nhập mã hồ sơ tại mục 'Tra cứu hồ sơ' hoặc liên hệ Bộ phận Một cửa để được hỗ trợ.";
+    }
+
+    // ==========================
+    // LỆ PHÍ
+    // ==========================
+
+    else if (
+        q.includes("lệ phí") ||
+        q.includes("mức phí") ||
+        q.includes("bao nhiêu tiền")
+    ) {
+
+        reply =
+            "💰 Lệ phí phụ thuộc từng thủ tục hành chính. Vui lòng cho biết tên thủ tục để được cung cấp mức phí cụ thể.";
+    }
+
+    // ==========================
+    // THANH TOÁN
+    // ==========================
+
+    else if (
+        q.includes("thanh toán") ||
+        q.includes("nộp phí")
+    ) {
+
+        reply =
+            "💳 Người dân có thể thanh toán lệ phí trực tiếp hoặc trực tuyến thông qua Cổng Dịch vụ công (nếu thủ tục hỗ trợ).";
+    }
+    // ==========================
+    // CẤP ĐỔI CĂN CƯỚC
+    // ==========================
+
+    else if (
+        q.includes("căn cước") ||
+        q.includes("cccd")
+    ) {
+
+        reply =
+            "🪪 THỦ TỤC CẤP/CẤP ĐỔI CĂN CƯỚC\n\n" +
+            "Hồ sơ gồm:\n" +
+            "- CCCD cũ (nếu có)\n" +
+            "- Thông tin cá nhân cần điều chỉnh\n\n" +
+            "📍 Thực hiện tại cơ quan Công an có thẩm quyền.";
+    }
+
+    // ==========================
+    // KHAI TỬ
+    // ==========================
+
+    else if (
+        q.includes("khai tử")
+    ) {
+
+        reply =
+            "⚫ THỦ TỤC ĐĂNG KÝ KHAI TỬ\n\n" +
+            "Hồ sơ gồm:\n" +
+            "- Tờ khai đăng ký khai tử\n" +
+            "- Giấy báo tử hoặc giấy tờ thay thế\n" +
+            "- CCCD người đi khai tử." ;
+    }
+
+    // ==========================
+    // XÁC NHẬN TÌNH TRẠNG HÔN NHÂN
+    // ==========================
+
+    else if (
+        q.includes("tình trạng hôn nhân")
+    ) {
+
+        reply =
+            "💌 THỦ TỤC XÁC NHẬN TÌNH TRẠNG HÔN NHÂN\n\n" +
+            "Hồ sơ gồm:\n" +
+            "- Tờ khai theo mẫu\n" +
+            "- CCCD người yêu cầu." ;
+    }
+
+    // ==========================
+    // SANG TÊN SỔ ĐỎ
+    // ==========================
+
+    else if (
+        q.includes("sang tên") ||
+        q.includes("chuyển nhượng đất")
+    ) {
+
+        reply =
+            "🏡 THỦ TỤC SANG TÊN SỔ ĐỎ\n\n" +
+            "Hồ sơ gồm:\n" +
+            "- Hợp đồng chuyển nhượng\n" +
+            "- CCCD các bên\n" +
+            "- Giấy chứng nhận quyền sử dụng đất\n" +
+            "- Các giấy tờ liên quan khác.";
+    }
+
+    // ==========================
+    // TÁCH THỬA
+    // ==========================
+
+    else if (
+        q.includes("tách thửa")
+    ) {
+
+        reply =
+            "📑 THỦ TỤC TÁCH THỬA ĐẤT\n\n" +
+            "Hồ sơ gồm:\n" +
+            "- Đơn đề nghị tách thửa\n" +
+            "- Giấy chứng nhận quyền sử dụng đất\n" +
+            "- CCCD người sử dụng đất.";
+    }
+
+    // ==========================
+    // MẪU ĐƠN
+    // ==========================
+
+    else if (
+        q.includes("mẫu đơn") ||
+        q.includes("tờ khai") ||
+        q.includes("lấy mẫu ở đâu")
+    ) {
+
+        reply =
+            "📄 Mẫu đơn, tờ khai được cung cấp:\n\n" +
+            "- Tại Bộ phận Một cửa\n" +
+            "- Trên Cổng Dịch vụ công khi nộp hồ sơ trực tuyến\n\n" +
+            "Anh/chị vui lòng cho biết tên thủ tục để được hướng dẫn đúng biểu mẫu.";
+    }
+
+    // ==========================
+    // QUY TRÌNH NỘP HỒ SƠ
+    // ==========================
+
+    else if (
+        q.includes("quy trình") ||
+        q.includes("cách nộp hồ sơ") ||
+        q.includes("hướng dẫn nộp")
+    ) {
+
+        reply =
+            "📋 QUY TRÌNH NỘP HỒ SƠ\n\n" +
+            "1. Chuẩn bị đầy đủ giấy tờ.\n" +
+            "2. Nộp trực tiếp tại Bộ phận Một cửa hoặc trực tuyến.\n" +
+            "3. Nhận phiếu hẹn.\n" +
+            "4. Theo dõi tiến độ xử lý hồ sơ.\n" +
+            "5. Nhận kết quả theo thời gian hẹn.";
+    }
+
+    // ==========================
+    // HỒ SƠ THIẾU
+    // ==========================
+
+    else if (
+        q.includes("thiếu giấy tờ") ||
+        q.includes("bổ sung hồ sơ")
+    ) {
+
+        reply =
+            "📋 Nếu hồ sơ chưa đầy đủ, cán bộ tiếp nhận sẽ hướng dẫn bổ sung các giấy tờ còn thiếu trước khi xử lý.";
+    }
+
+    // ==========================
+    // KẾT QUẢ HỒ SƠ
+    // ==========================
+
+    else if (
+        q.includes("nhận kết quả") ||
+        q.includes("trả kết quả")
+    ) {
+
+        reply =
+            "📦 Kết quả được trả tại Bộ phận Một cửa hoặc qua dịch vụ công trực tuyến (nếu thủ tục hỗ trợ).";
+    }
+
+    // ==========================
+    // TRA CỨU TIẾN ĐỘ
+    // ==========================
+
+    else if (
+        q.includes("tiến độ") ||
+        q.includes("tra cứu tiến độ")
+    ) {
+
+        reply =
+            "🔎 Anh/chị có thể tra cứu bằng mã hồ sơ tại mục Tra cứu hồ sơ trên website."
+    }
+    // ==========================
+    // THANH TOÁN TRỰC TUYẾN
+    // ==========================
+
+    else if (
+        q.includes("thanh toán trực tuyến") ||
+        q.includes("nộp lệ phí online")
+    ) {
+
+        reply =
+            "💳 Một số thủ tục hỗ trợ thanh toán trực tuyến qua Cổng Dịch vụ công Quốc gia.";
+    }
+
+    // ==========================
+    // GIỜ LÀM VIỆC
+    // ==========================
+
+    else if (
+        q.includes("giờ làm việc")
+    ) {
+
+        reply =
+            "🕒 Thời gian làm việc:\n" +
+            "Sáng: 07h00 - 11h30\n" +
+            "Chiều: 13h30 - 17h00\n" +
+            "Từ Thứ Hai đến Thứ Sáu.";
+    }
+
+    // ==========================
+    // ĐỊA CHỈ
+    // ==========================
+
+    else if (
+        q.includes("địa chỉ")
+    ) {
+
+        reply =
+            "📍 42 Hùng Vương,Đăk Hà 1, xã Đăk Hà, tỉnh Quảng Ngãi.";
+    }
+
+    // ==========================
+    // ĐIỆN THOẠI
+    // ==========================
+
+    else if (
+        q.includes("điện thoại") ||
+        q.includes("liên hệ")
+    ) {
+
+        reply =
+            "☎️ Điện thoại liên hệ: 02553856504";
+    }
+
+    // ==========================
+    // DỊCH VỤ CÔNG
+    // ==========================
+
+    else if (
+        q.includes("dịch vụ công")
+    ) {
+
+        reply =
+            "🌐 Anh/chị có thể thực hiện thủ tục trực tuyến tại Cổng Dịch vụ công Quốc gia.";
+    }
+
+    setTimeout(
+        function () {
+
+            addMessage(
+                reply,
+                "bot"
+            );
+
+        },
+        500
+    );
+
+    input.value = "";
+
+    input.focus();
+}
+
+// ==============================
+// GIỌNG NÓI
+// ==============================
+
+function startChatVoice() {
+
+    if (
+        !(
+            "webkitSpeechRecognition" in window ||
+            "SpeechRecognition" in window
+        )
+    ) {
+
+        alert(
+            "Trình duyệt không hỗ trợ nhận dạng giọng nói."
+        );
+
+        return;
+    }
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang =
+        "vi-VN";
+
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
+    addMessage(
+        "🎤 Đang nghe...",
+        "bot"
+    );
+
+    recognition.start();
+
+    recognition.onresult =
+        function (event) {
+
+            const text =
+                event.results[0][0]
+                    .transcript;
+
+            const input =
+                document.getElementById(
+                    "chat-input"
+                );
+
+            if (input) {
+
+                input.value =
+                    text;
+
+                setTimeout(
+                    function () {
+
+                        sendMessage();
+
+                    },
+                    300
+                );
+            }
+        };
+
+    recognition.onerror =
+        function () {
+
+            alert(
+                "Không nhận diện được giọng nói."
+            );
+        };
+}

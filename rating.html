@@ -1,0 +1,72 @@
+function submitFeedback()
+{
+    const fullName =
+    document.getElementById("fullName").value.trim();
+
+    const phone =
+    document.getElementById("phone").value.trim();
+
+    const email =
+    document.getElementById("email").value.trim();
+
+    const category =
+    document.getElementById("category").value;
+
+    const content =
+    document.getElementById("content").value.trim();
+
+    if(
+        fullName === "" ||
+        phone === "" ||
+        category === "" ||
+        content === ""
+    )
+    {
+        alert(
+            "Vui lòng nhập đầy đủ thông tin."
+        );
+        return;
+    }
+
+    const feedback = {
+
+        id: Date.now(),
+
+        fullName,
+
+        phone,
+
+        email,
+
+        category,
+
+        content,
+
+        date:
+        new Date().toLocaleString("vi-VN"),
+
+        status:
+        "pending"
+
+    };
+
+    let feedbackList =
+    JSON.parse(
+        localStorage.getItem("feedbacks")
+    ) || [];
+
+    feedbackList.push(feedback);
+
+    localStorage.setItem(
+        "feedbacks",
+        JSON.stringify(feedbackList)
+    );
+
+    alert(
+        "Gửi phản ánh thành công!"
+    );
+
+    document
+    .getElementById("feedbackForm")
+    .reset();
+}

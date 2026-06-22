@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Trung tâm Phục vụ Hành chính công xã Đăk Hà</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chatbot.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="js/datetime.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/search.js"></script>
+    <script src="/js/feedback.js"></script>
+    <script src="/js/forms.js"></script>
+</head>
+
+<body>
+
+<header>
+
+    <div class="top-banner">
+
+        <div class="banner-container">
+
+            <div class="banner-logo">
+                <img src="images/quoc huy.jpg" alt="Quốc huy">
+            </div>
+
+            <div class="banner-text">
+
+                <h1>
+                    TRUNG TÂM PHỤC VỤ HÀNH CHÍNH CÔNG
+                </h1>
+
+                <h2>
+                    XÃ ĐĂK HÀ
+                </h2>
+
+                <p>
+               0     Hành chính phục vụ - Chuyển đổi số vì người dân
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+        ☰
+    </div>
+
+   <div class="nav-wrapper">
+
+    <nav class="navbar" id="navbar">
+
+        <a href="index.html">TRANG CHỦ</a>
+
+        <a href="pages/procedures.html">
+            TRA CỨU THỦ TỤC HÀNH CHÍNH
+        </a>
+
+        <a href="pages/forms.html">
+            BIỂU MẪU HÀNH CHÍNH
+        </a>
+
+        <a href="pages/feedback.html">
+            PHẢN ÁNH KIẾN NGHỊ
+        </a>
+
+        <a href="pages/rating.html">
+            ĐÁNH GIÁ HÀI LÒNG
+        </a>
+
+        <div class="account-menu">
+          <span id="userName"></span>
+
+            <i class="fa-solid fa-user" id="accountIcon" title="Đăng nhập"> </i>
+
+        <button
+            id="logoutBtn"
+            onclick="logout()">
+            Đăng xuất
+        </button>
+
+    </div>
+
+</nav>
+           
+</div>
+    <div class="marquee-bar">
+
+        <div class="date-time" id="datetime"></div>
+
+        <div class="running-text">
+
+            <marquee behavior="scroll" direction="left">
+
+                🎉 CHÀO MỪNG BẠN ĐẾN VỚI TRANG THÔNG TIN ĐIỆN TỬ
+                TRUNG TÂM PHỤC VỤ HÀNH CHÍNH CÔNG XÃ ĐĂK HÀ
+
+            </marquee>
+
+        </div>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Tìm kiếm...">
+
+            <span
+                class="mic-icon"
+                onclick="startVoiceSearch()"
+                title="Tìm kiếm bằng giọng nói">
+
+                <i class="fas fa-microphone"></i>
+
+            </span>
+
+            <button
+                class="search-btn"
+                onclick="searchPage()">
+
+                🔍
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div id="voice-status"></div>
+
+</header>
+
+<!-- GIỚI THIỆU -->
+
+<section class="hero">
+
+    <h2>
+        Hỗ trợ người dân thực hiện thủ tục hành chính nhanh chóng
+    </h2>
+
+    <p>
+        Tra cứu thủ tục, hỏi đáp trực tuyến,
+        phản ánh kiến nghị và đánh giá chất lượng phục vụ.
+    </p>
+
+</section>
+
+<!-- DỊCH VỤ CÔNG -->
+
+<section class="quick-services">
+
+    <h2>DỊCH VỤ CÔNG NỔI BẬT</h2>
+
+    <div class="service-grid">
+
+        <div class="service-box"
+             onclick="location.href='pages/procedures.html'">
+
+            <h3>📄 Tra cứu thủ tục</h3>
+
+            <p>
+                Tìm kiếm thủ tục hành chính nhanh chóng.
+            </p>
+
+        </div>
+
+        <div class="service-box"
+             onclick="document.getElementById('chat-icon').click()">
+
+            <h3>🤖 Chatbot hỗ trợ</h3>
+
+            <p>
+                Hỏi đáp thủ tục hành chính 24/7.
+            </p>
+
+        </div>
+
+        <div class="service-box"
+             onclick="location.href='pages/forms.html'">
+
+            <h3>🎫 Biểu mẫu hành chính</h3>
+
+            <p>
+                Đăng ký trước khi đến trung tâm.
+            </p>
+
+        </div>
+
+        <div class="service-box"
+             onclick="location.href='pages/feedback.html'">
+
+            <h3>📝 Phản ánh kiến nghị</h3>
+
+            <p>
+                Tiếp nhận phản ánh từ người dân.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- THỦ TỤC PHỔ BIẾN -->
+
+<section class="popular-section">
+
+    <h2>
+        THỦ TỤC HÀNH CHÍNH PHỔ BIẾN
+    </h2>
+
+    <div class="popular-grid">
+
+        <div class="card"
+             onclick="location.href='pages/procedures.html'">
+            📌 Đăng ký khai sinh
+        </div>
+
+        <div class="card"
+             onclick="location.href='pages/procedures.html'">
+            📌 Đăng ký kết hôn
+        </div>
+
+        <div class="card"
+             onclick="location.href='pages/procedures.html'">
+            📌 Chứng thực bản sao
+        </div>
+
+        <div class="card"
+             onclick="location.href='pages/procedures.html'">
+            📌 Đăng ký đất đai
+        </div>
+
+    </div>
+
+</section>
+
+<!-- TIN TỨC -->
+
+<section class="news-section">
+
+    <h2>
+        TIN TỨC - THÔNG BÁO
+    </h2>
+
+    <div class="news-box">
+
+        <ul>
+            <li>Thông báo lịch tiếp công dân tháng 06/2026.</li>
+            <li>Hướng dẫn sử dụng dịch vụ công trực tuyến.</li>
+            <li>Thông báo tiếp nhận hồ sơ trực tuyến mức độ 4.</li>
+            <li>Kế hoạch chuyển đổi số xã Đăk Hà năm 2026.</li>
+
+        </ul>
+
+    </div>
+
+</section>
+
+<!-- LIÊN KẾT NHANH -->
+
+<section class="links-section">
+
+    <h2>
+        LIÊN KẾT NHANH
+    </h2>
+
+    <div class="popular-grid">
+
+        <div class="card"
+             onclick="window.open('https://dichvucong.gov.vn')">
+            🌐 Dịch vụ công Quốc gia
+        </div>
+
+        <div class="card"
+             onclick="window.open('https://dichvucong.quangngai.gov.vn')">
+            🌐 Cổng DVC tỉnh Quảng Ngãi
+        </div>
+
+        <div class="card"
+             onclick="location.href='pages/procedures.html'">
+            🌐 Tra cứu hồ sơ
+        </div>
+
+        <div class="card"
+             onclick="window.open('https://vbpl.vn')">
+            🌐 Văn bản pháp luật
+        </div>
+
+    </div>
+
+</section>
+
+<!-- CHATBOT -->
+
+<div class="chat-tooltip"
+     onclick="openChatBot()">
+    Tôi có thể hỗ trợ gì?
+</div>
+
+<div id="chat-icon"
+     onclick="openChatBot()">
+
+    <img src="images/chatbot.jpg"
+         alt="Chatbot">
+
+</div>
+
+<div id="chat-box">
+
+    <div class="chat-header">
+
+        Trợ lý hành chính công
+
+        <span class="close-chat"
+              onclick="closeChatBot()">
+            ✖
+        </span>
+
+    </div>
+
+    <div id="chat-messages">
+
+        <div class="bot-message">
+            👋 Xin chào! Chúng tôi có thể hỗ trợ gì cho anh/chị?
+        </div>
+
+        <div class="quick-question">
+
+            <button onclick="quickAsk('Đăng ký khai sinh')">
+                📄 Khai sinh
+            </button>
+
+            <button onclick="quickAsk('Đăng ký kết hôn')">
+                💍 Kết hôn
+            </button>
+
+            <button onclick="quickAsk('Chứng thực bản sao')">
+                📑 Chứng thực
+            </button>
+
+            <button onclick="quickAsk('Đất đai')">
+                🏠 Đất đai
+            </button>
+
+            <button onclick="quickAsk('Giờ làm việc')">
+                🕒 Giờ làm việc
+            </button>
+
+            <button onclick="quickAsk('Địa chỉ')">
+                📍Địa chỉ
+            </button>
+        </div>
+
+    </div>
+
+    <div class="chat-input-area">
+
+        <input
+            type="text"
+            id="chat-input"
+            placeholder="Nhập hoặc nói câu hỏi...">
+
+        <span
+            class="mic-icon"
+            onclick="startChatVoice()"
+            title="Nhấn để nói">
+
+            <i class="fas fa-microphone"></i>
+
+        </span>
+
+        <button
+            class="chat-send"
+            onclick="sendMessage()">
+
+            ➤
+
+        </button>
+
+    </div>
+
+</div>  
+<!-- Modal Đăng nhập -->
+
+<div id="loginModal" class="login-modal">
+
+    <div class="login-box">
+
+        <span
+            class="close-login"
+            onclick="closeLogin()">
+
+            &times;
+
+        </span>
+
+        <h2>Đăng nhập</h2>
+
+        <input
+            type="text"
+            id="loginUser"
+            placeholder="Tên đăng nhập">
+
+        <input
+            type="password"
+            id="loginPass"
+            placeholder="Mật khẩu">
+
+        <button onclick="login()">
+
+            Đăng nhập
+
+        </button>
+
+        <p>
+
+    Chưa có tài khoản?
+
+    <a href="#"
+       onclick="showRegister()">
+       Đăng ký
+    </a>
+
+    </p>
+
+    </div>
+
+</div>
+<div id="registerModal" class="login-modal">
+
+    <div class="login-box">
+
+        <span
+            class="close-login"
+            onclick="closeRegister()">
+
+            &times;
+
+        </span>
+
+        <h2>Đăng ký tài khoản</h2>
+
+        <input
+            type="text"
+            id="registerUser"
+            placeholder="Tên đăng nhập">
+
+        <input
+            type="password"
+            id="registerPass"
+            placeholder="Mật khẩu">
+
+        <input
+            type="password"
+            id="registerPass2"
+            placeholder="Nhập lại mật khẩu">
+
+        <button onclick="register()">
+
+            Đăng ký
+
+        </button>
+
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+    <h3>
+        TRANG THÔNG TIN ĐIỆN TỬ TRUNG TÂM HÀNH CHÍNH CÔNG
+        UBND XÃ ĐĂK HÀ
+    </h3>
+
+    <p>
+        Chịu trách nhiệm: UBND XÃ ĐĂK HÀ
+    </p>
+
+    <p>
+        Điện thoại: 02553856504
+    </p>
+
+    <p>
+        Địa chỉ: Xã Đăk Hà, Tỉnh Quảng Ngãi
+    </p>
+
+</footer>
+
+<script>
+
+const accountIcon =
+document.getElementById("accountIcon");
+
+const loginModal =
+document.getElementById("loginModal");
+
+const registerModal =
+document.getElementById("registerModal");
+
+const logoutBtn =
+document.getElementById("logoutBtn");
+
+const userName =
+document.getElementById("userName");
+
+
+// Click icon tài khoản
+accountIcon.addEventListener(
+    "click",
+    function()
+    {
+        const user =
+        sessionStorage.getItem("user");
+
+        if(!user)
+        {
+            loginModal.style.display =
+            "flex";
+        }
+    }
+);
+
+
+// Đóng modal đăng nhập
+function closeLogin()
+{
+    loginModal.style.display =
+    "none";
+}
+
+
+// Mở form đăng ký
+function showRegister()
+{
+    loginModal.style.display =
+    "none";
+
+    registerModal.style.display =
+    "flex";
+}
+
+
+// Đóng form đăng ký
+function closeRegister()
+{
+    registerModal.style.display =
+    "none";
+}
+
+
+// Click ngoài modal để đóng
+window.onclick = function(event)
+{
+    if(event.target === loginModal)
+    {
+        loginModal.style.display =
+        "none";
+    }
+
+    if(event.target === registerModal)
+    {
+        registerModal.style.display =
+        "none";
+    }
+}
+
+
+// Đăng ký
+function register()
+{
+    const username =
+    document
+    .getElementById("registerUser")
+    .value
+    .trim();
+
+    const password =
+    document
+    .getElementById("registerPass")
+    .value
+    .trim();
+
+    const confirmPassword =
+    document
+    .getElementById("registerPass2")
+    .value
+    .trim();
+
+    if(
+        username === "" ||
+        password === "" ||
+        confirmPassword === ""
+    )
+    {
+        alert(
+            "Vui lòng nhập đầy đủ thông tin"
+        );
+        return;
+    }
+
+    if(password !== confirmPassword)
+    {
+        alert(
+            "Mật khẩu nhập lại không khớp"
+        );
+        return;
+    }
+
+    localStorage.setItem(
+        "account",
+        JSON.stringify({
+            username: username,
+            password: password
+        })
+    );
+
+    alert(
+        "Đăng ký thành công"
+    );
+
+    registerModal.style.display =
+    "none";
+
+    loginModal.style.display =
+    "flex";
+
+    document
+    .getElementById("registerUser")
+    .value = "";
+
+    document
+    .getElementById("registerPass")
+    .value = "";
+
+    document
+    .getElementById("registerPass2")
+    .value = "";
+}
+
+
+// Đăng nhập
+function login()
+{
+    const username =
+    document
+    .getElementById("loginUser")
+    .value
+    .trim();
+
+    const password =
+    document
+    .getElementById("loginPass")
+    .value
+    .trim();
+
+    if(
+        username === "" ||
+        password === ""
+    )
+    {
+        alert(
+            "Vui lòng nhập đầy đủ thông tin"
+        );
+        return;
+    }
+
+    const account =
+    JSON.parse(
+        localStorage.getItem("account")
+    );
+
+    if(!account)
+    {
+        alert(
+            "Chưa có tài khoản. Vui lòng đăng ký."
+        );
+        return;
+    }
+
+    if(
+        username !== account.username ||
+        password !== account.password
+    )
+    {
+        alert(
+            "Sai tài khoản hoặc mật khẩu"
+        );
+        return;
+    }
+
+    // Lưu phiên đăng nhập
+    sessionStorage.setItem(
+        "user",
+        username
+    );
+
+    userName.innerHTML = "";
+
+    logoutBtn.style.display =
+    "inline-block";
+
+    accountIcon.style.display =
+    "none";
+
+    loginModal.style.display =
+    "none";
+
+    document
+    .getElementById("loginUser")
+    .value = "";
+
+    document
+    .getElementById("loginPass")
+    .value = "";
+
+    alert(
+        "Đăng nhập thành công"
+    );
+}
+
+
+// Đăng xuất
+function logout()
+{
+    sessionStorage.removeItem(
+        "user"
+    );
+
+    userName.innerHTML = "";
+
+    logoutBtn.style.display =
+    "none";
+
+    accountIcon.style.display =
+    "inline-block";
+
+    alert(
+        "Đã đăng xuất"
+    );
+}
+
+
+// Kiểm tra khi tải trang
+window.onload = function()
+{
+    const user =
+    sessionStorage.getItem("user");
+
+    if(user)
+    {
+        userName.innerHTML = "";
+
+        logoutBtn.style.display =
+        "inline-block";
+
+        accountIcon.style.display =
+        "none";
+    }
+    else
+    {
+        userName.innerHTML = "";
+
+        logoutBtn.style.display =
+        "none";
+
+        accountIcon.style.display =
+        "inline-block";
+    }
+}
+
+</script>
+
+</body>
+</html>

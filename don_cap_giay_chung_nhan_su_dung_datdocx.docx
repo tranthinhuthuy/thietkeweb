@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quản trị hệ thống - Trung tâm Hành chính công xã Đăk Hà</title>
+
+<link rel="stylesheet" href="admin.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="js/admin.js"></script>
+<script src="../js/datetime.js"></script>
+<script src="/js/search.js"></script>
+
+</head>
+
+<body>
+    <!-- KHU VỰC QUẢN TRỊ (ẨN KHI CHƯA ĐĂNG NHẬP) -->
+
+<div id="adminContent" style="display:none;">
+
+<!-- HEADER -->
+
+<header>
+
+    <!-- BANNER -->
+
+    <div class="top-banner">
+
+        <div class="banner-container">
+
+            <div class="banner-logo">
+                <img src="../images/quoc huy.jpg" alt="Quốc huy">
+            </div>
+
+            <div class="banner-text">
+
+                <h1>
+                    TRUNG TÂM PHỤC VỤ HÀNH CHÍNH CÔNG
+                </h1>
+
+                <h2>
+                    XÃ ĐĂK HÀ
+                </h2>
+
+                <p>
+                    Hành chính phục vụ - Chuyển đổi số vì người dân
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+   <div
+    class="menu-toggle" onclick="toggleMenu()">
+    ☰
+
+</div>
+
+<!-- MENU -->
+
+<div class="nav-wrapper">
+
+    <nav class="navbar" id="navbar">
+
+        <a href="admin.html">
+            <i class="fa-solid fa-gauge"></i>
+            TRANG CHỦ
+        </a>
+
+        <a href="feedback.html">
+            <i class="fa-solid fa-comments"></i>
+            PHẢN ÁNH
+        </a>
+
+        <a href="rating.html">
+            <i class="fa-solid fa-star"></i>
+            ĐÁNH GIÁ
+        </a>
+
+        <a href="forms.html">
+            <i class="fa-solid fa-file-word"></i>
+            BIỂU MẪU
+        </a>
+
+        <a href="procedures.html">
+            <i class="fa-solid fa-clipboard-list"></i>
+            THỦ TỤC
+        </a>
+
+        <a href="accounts.html">
+            <i class="fa-solid fa-users"></i>
+            TÀI KHOẢN
+        </a>   
+         <div class="account-menu">
+    <button onclick="logoutAdmin()">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Đăng xuất
+    </button>
+
+</div>  
+
+        </nav>
+
+    </div>
+
+    <!-- THANH THÔNG BÁO -->
+
+    <div class="marquee-bar">
+
+        <div
+            class="date-time"
+            id="datetime">
+        </div>
+
+      <div class="running-text">
+
+    <div class="marquee-text">
+
+        🎉 CHÀO MỪNG ĐẾN TRANG QUẢN TRỊ HỆ THỐNG
+        TRUNG TÂM PHỤC VỤ HÀNH CHÍNH CÔNG XÃ ĐĂK HÀ
+
+    </div>
+
+</div>
+
+    <div class="search-box">
+
+    <input
+        type="text"
+        id="searchInput"
+        placeholder="Tìm kiếm...">
+
+    <span
+        class="mic-icon"
+        onclick="startVoiceSearch()"
+        title="Tìm kiếm bằng giọng nói">
+
+        <i class="fas fa-microphone"></i>
+
+    </span>
+
+    <button
+        class="search-btn"
+        onclick="searchPage()">
+
+        🔍
+
+    </button>
+
+</div>
+
+    </div>
+
+</header>
+
+<!-- NỘI DUNG -->
+
+<div class="main-content">
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboard">
+
+        <h2 class="section-title">
+            Thống kê tổng quan
+        </h2>
+
+        <div class="dashboard">
+
+            <div class="card">
+                <h3>Tổng phản ánh</h3>
+                <span id="totalFeedback">0</span>
+            </div>
+
+            <div class="card">
+                <h3>Tổng đánh giá</h3>
+                <span id="totalRating">0</span>
+            </div>
+
+            <div class="card">
+                <h3>Tổng tài khoản</h3>
+                <span id="totalUser">0</span>
+            </div>
+
+            <div class="card">
+                <h3>Đánh giá 5⭐</h3>
+                <span id="fiveStar">0</span>
+            </div>
+
+            <div class="card">
+                <h3>Tổng thủ tục</h3>
+                <span id="totalProcedure">0</span>
+            </div>
+
+            <div class="card">
+                <h3>Tổng biểu mẫu</h3>
+                <span id="totalForm">0</span>
+            </div>
+
+        </div>
+
+    </section>
+
+<!-- TRUY CẬP NHANH -->
+
+<section id="quick-access">
+
+    <h2 class="section-title">
+        Quản lý nhanh
+    </h2>
+
+    <div class="dashboard">
+
+        <!-- PHẢN ÁNH -->
+
+        <div class="quick-card feedback">
+
+            <i class="fas fa-comments"></i>
+
+            <h3>
+                Phản ánh kiến nghị
+            </h3>
+
+            <div class="card-count"
+                id="feedbackCount">
+                0
+            </div>
+
+            <p>
+                Quản lý phản ánh, kiến nghị của người dân.
+            </p>
+
+            <button
+                onclick="location.href='feedback.html'">
+                Xem chi tiết
+            </button>
+
+        </div>
+
+        <!-- ĐÁNH GIÁ -->
+
+        <div class="quick-card rating">
+
+            <i class="fas fa-star"></i>
+
+            <h3>
+                Đánh giá hài lòng
+            </h3>
+
+            <div class="card-count"
+                id="ratingCount">
+                0
+            </div>
+
+            <p>
+                Theo dõi mức độ hài lòng của người dân.
+            </p>
+
+            <button
+                onclick="location.href='rating.html'">
+                Xem chi tiết
+            </button>
+
+        </div>
+
+        <!-- BIỂU MẪU -->
+
+        <div class="quick-card forms">
+
+            <i class="fas fa-file-word"></i>
+
+            <h3>
+                Biểu mẫu hành chính
+            </h3>
+
+            <div class="card-count"
+                id="formCount">
+                0
+            </div>
+
+            <p>
+                Quản lý danh mục biểu mẫu tải xuống.
+            </p>
+
+            <button
+                onclick="location.href='forms.html'">
+                Quản lý
+            </button>
+
+        </div>
+
+        <!-- THỦ TỤC -->
+
+        <div class="quick-card procedure">
+
+            <i class="fas fa-clipboard-list"></i>
+
+            <h3>
+                Thủ tục hành chính
+            </h3>
+
+            <div class="card-count"
+                id="procedureCount">
+                0
+            </div>
+
+            <p>
+                Quản lý thủ tục và quy trình giải quyết hồ sơ.
+            </p>
+
+            <button
+                onclick="location.href='procedures.html'">
+                Quản lý
+            </button>
+
+        </div>
+
+        <!-- TÀI KHOẢN -->
+
+        <div class="quick-card user">
+
+            <i class="fas fa-users"></i>
+
+            <h3>
+                Tài khoản
+            </h3>
+
+            <div class="card-count"
+                id="userCount">
+                0
+            </div>
+
+            <p>
+                Quản lý tài khoản quản trị và người dùng.
+            </p>
+
+            <button
+                onclick="location.href='users.html'">
+                Quản lý
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+    <!-- BÁO CÁO THỐNG KÊ -->
+
+    <section id="report-section">
+
+        <h2 class="section-title">
+            Báo cáo thống kê
+        </h2>
+
+        <div class="dashboard">
+
+            <div class="card">
+                <h3>Lượt truy cập</h3>
+                <span id="totalVisit">0</span>
+            </div>
+
+            <div class="card">
+                <h3>Lượt tải biểu mẫu</h3>
+                <span id="downloadCount">0</span>
+            </div>
+
+            <div class="card">
+                <h3>Tỷ lệ hài lòng</h3>
+                <span id="satisfactionRate">0%</span>
+            </div>
+
+            <div class="card">
+                <h3>Hồ sơ đã giải quyết</h3>
+                <span id="resolvedRecord">0</span>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- HOẠT ĐỘNG GẦN ĐÂY -->
+
+    <section id="recent-section">
+
+        <h2 class="section-title">
+            Hoạt động gần đây
+        </h2>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Thời gian</th>
+                        <th>Nội dung</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>18/06/2026</td>
+                        <td>Có phản ánh mới từ người dân</td>
+                    </tr>
+
+                    <tr>
+                        <td>18/06/2026</td>
+                        <td>Có đánh giá 5 sao mới</td>
+                    </tr>
+
+                    <tr>
+                        <td>18/06/2026</td>
+                        <td>Biểu mẫu khai sinh được tải xuống</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+    <h3>
+        TRANG THÔNG TIN ĐIỆN TỬ
+        TRUNG TÂM HÀNH CHÍNH CÔNG
+        UBND XÃ ĐĂK HÀ
+    </h3>
+
+    <p>
+        Chịu trách nhiệm:
+        UBND XÃ ĐĂK HÀ
+    </p>
+
+    <p>
+        Điện thoại:
+        02553856504
+    </p>
+
+    <p>
+        Địa chỉ:
+        Xã Đăk Hà, tỉnh Quảng Ngãi
+    </p>
+
+</footer>
+</div>
+<!-- FORM ĐĂNG NHẬP BẮT BUỘC -->
+
+<div id="authModal" class="modal">
+
+    <div class="modal-content auth-box">
+
+        <h2>
+
+            <i class="fa-solid fa-lock"></i>
+
+            Đăng nhập quản trị hệ thống
+
+        </h2>
+
+        <p class="login-note">
+
+            Vui lòng đăng nhập để truy cập trang quản trị.
+
+        </p>
+
+        <input
+            type="text"
+            id="loginUser"
+            placeholder="Tên đăng nhập">
+
+        <input
+            type="password"
+            id="loginPass"
+            placeholder="Mật khẩu">
+
+        <button
+            type="button"
+            onclick="loginAdmin()">
+
+            <i class="fa-solid fa-right-to-bracket"></i>
+
+            Đăng nhập
+
+        </button>
+
+        <p
+            id="loginError"
+            class="login-error">
+
+        </p>
+
+    </div>
+
+</div>
+<script>
+
+function loginAdmin(){
+
+    const user =
+    document.getElementById(
+        "loginUser"
+    ).value.trim();
+
+    const pass =
+    document.getElementById(
+        "loginPass"
+    ).value.trim();
+
+    if(
+        user === "admin"
+        &&
+        pass === "123456"
+    ){
+
+      sessionStorage.setItem(
+        "adminLoggedIn",
+        "true"
+    );
+
+        document.getElementById(
+            "authModal"
+        ).style.display =
+        "none";
+
+        document.getElementById(
+            "adminContent"
+        ).style.display =
+        "block";
+
+    }
+
+    else{
+
+        document.getElementById(
+            "loginError"
+        ).innerHTML =
+        "Sai tên đăng nhập hoặc mật khẩu";
+
+    }
+
+}
+
+
+function logoutAdmin(){
+
+   sessionStorage.removeItem(
+        "adminLoggedIn"
+    );
+
+    location.reload();
+
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function()
+    {
+        const isLogin =
+        sessionStorage.getItem(
+            "adminLoggedIn"
+        );
+
+        if(isLogin === "true")
+        {
+            document.getElementById(
+                "authModal"
+            ).style.display =
+            "none";
+
+            document.getElementById(
+                "adminContent"
+            ).style.display =
+            "block";
+        }
+        else
+        {
+            document.getElementById(
+                "authModal"
+            ).style.display =
+            "flex";
+
+            document.getElementById(
+                "adminContent"
+            ).style.display =
+            "none";
+        }
+    }
+);
+
+// Nhấn Enter để đăng nhập
+
+document.addEventListener(
+    "keydown",
+    function(e)
+    {
+        const authModal =
+        document.getElementById(
+            "authModal"
+        );
+
+        if(
+            authModal &&
+            authModal.style.display !== "none" &&
+            e.key === "Enter"
+        )
+        {
+            loginAdmin();
+        }
+    }
+);
+</script>
+
+</body>
+
+</html>

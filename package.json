@@ -1,0 +1,288 @@
+const procedures = [
+{
+    id: 1,
+    name: "Cấp bản sao giấy khai sinh",
+    field: "Hộ tịch",
+    duration: "01 ngày",
+    fee: "Miễn phí",
+    agency: "UBND xã Đăk Hà",
+    documents: [
+        "CCCD hoặc CMND",
+        "Tờ khai yêu cầu cấp bản sao"
+    ]
+},
+
+{
+    id: 2,
+    name: "Đăng ký kết hôn",
+    field: "Hộ tịch",
+    duration: "03 ngày",
+    fee: "Miễn phí",
+    agency: "UBND xã Đăk Hà",
+    documents: [
+        "CCCD của hai bên",
+        "Giấy xác nhận tình trạng hôn nhân"
+    ]
+},
+
+{
+    id: 3,
+    name: "Chứng thực bản sao",
+    field: "Chứng thực",
+    duration: "Trong ngày",
+    fee: "Theo quy định",
+    agency: "UBND xã Đăk Hà",
+    documents: [
+        "Bản chính giấy tờ",
+        "Bản sao cần chứng thực"
+    ]
+},
+
+{
+    id: 4,
+    name: "Xác nhận nguồn gốc đất",
+    field: "Đất đai",
+    duration: "05 ngày",
+    fee: "Theo quy định",
+    agency: "UBND xã Đăk Hà",
+    documents: [
+        "Đơn đề nghị",
+        "CCCD",
+        "Giấy tờ liên quan đến thửa đất"
+    ]
+}
+];
+
+const procedureList =
+document.getElementById("procedureList");
+
+const searchInput =
+document.getElementById("searchInput");
+
+const fieldFilter =
+document.getElementById("fieldFilter");
+
+const searchBtn =
+document.getElementById("searchBtn");
+
+const modal =
+document.getElementById("procedureModal");
+
+const modalBody =
+document.getElementById("modalBody");
+
+/* Chuẩn hóa chuỗi */
+
+function normalizeText(text)
+{
+    return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/[^a-z0-9]/g, "");
+}
+
+/* Hiển thị danh sách */
+
+function displayProcedures(data)
+{
+    procedureList.innerHTML = "";
+
+    if(data.length === 0)
+    {
+        procedureList.innerHTML = `
+            <div class="card no-result">
+                <h3>Không tìm thấy thủ tục phù hợp</h3>
+                <p>Vui lòng thử từ khóa khác.</p>
+            </div>
+        `;
+        return;
+    }
+
+    data.forEach(item =>
+    {
+        const card =
+        document.createElement("div");
+
+        card.classList.add("procedure-card");
+
+        card.innerHTML = `
+            <h3>${item.name}</h3>
+
+            <div class="procedure-info">
+
+                <p>
+                    <strong>Lĩnh vực:</strong>
+                    ${item.field}
+                </p>
+
+                <p>
+                    <strong>Thời gian:</strong>
+                    ${item.duration}
+                </p>
+
+                <p>
+                    <strong>Lệ phí:</strong>
+                    ${item.fee}
+                </p>
+
+            </div>
+
+            <button
+                class="procedure-btn"
+                onclick="showDetail(${item.id})">
+
+                Xem chi tiết
+
+            </button>
+        `;
+
+        procedureList.appendChild(card);
+    });
+}
+
+/* Xem chi tiết */
+
+function showDetail(id)
+{
+    const procedure =
+    procedures.find(
+        item => item.id === id
+    );
+
+    let docs = "";
+
+    procedure.documents.forEach(doc =>
+    {
+        docs += `<li>${doc}</li>`;
+    });
+
+    modalBody.innerHTML = `
+
+        <div class="procedure-detail">
+
+            <h2>${procedure.name}</h2>
+
+            <p>
+                <strong>Lĩnh vực:</strong>
+                ${procedure.field}
+            </p>
+
+            <p>
+                <strong>Thời gian giải quyết:</strong>
+                ${procedure.duration}
+            </p>
+
+            <p>
+                <strong>Lệ phí:</strong>
+                ${procedure.fee}
+            </p>
+
+            <p>
+                <strong>Cơ quan thực hiện:</strong>
+                ${procedure.agency}
+            </p>
+
+            <h3>Hồ sơ cần chuẩn bị</h3>
+
+            <ul>
+                ${docs}
+            </ul>
+
+            <button onclick="closeModal()">
+                Đóng
+            </button>
+
+        </div>
+
+    `;
+
+    modal.style.display = "block";
+}
+
+/* Đóng modal */
+
+function closeModal()
+{
+    modal.style.display = "none";
+}
+
+/* Tìm kiếm */
+
+function filterProcedures()
+{
+    const keyword =
+    normalizeText(
+        searchInput.value
+    );
+
+    const field =
+    fieldFilter.value;
+
+    const result =
+    procedures.filter(item =>
+    {
+        const procedureName =
+        normalizeText(item.name);
+
+        const matchKeyword =
+        keyword === "" ||
+        procedureName.includes(keyword);
+
+        const matchField =
+        field === "" ||
+        item.field === field;
+
+        return (
+            matchKeyword &&
+            matchField
+        );
+    });
+
+    displayProcedures(result);
+}
+
+/* Nút tìm kiếm */
+
+searchBtn.addEventListener(
+    "click",
+    filterProcedures
+);
+
+/* Nhấn Enter */
+
+searchInput.addEventListener(
+    "keypress",
+    function(event)
+    {
+        if(event.key === "Enter")
+        {
+            filterProcedures();
+        }
+    }
+);
+
+/* Chọn lĩnh vực */
+
+fieldFilter.addEventListener(
+    "change",
+    filterProcedures
+);
+
+/* Đóng modal khi click ra ngoài */
+
+window.addEventListener(
+    "click",
+    function(event)
+    {
+        if(event.target === modal)
+        {
+            closeModal();
+        }
+    }
+);
+
+/* Khởi tạo */
+
+displayProcedures(procedures);

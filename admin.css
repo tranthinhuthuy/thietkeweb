@@ -1,0 +1,204 @@
+function showEvaluationForm()
+{
+    const service =
+    document
+    .getElementById("service")
+    .value;
+
+    const evaluationForm =
+    document
+    .getElementById("evaluationForm");
+
+    const specialQuestion =
+    document
+    .getElementById("specialQuestion");
+
+    const specialLabel =
+    document
+    .getElementById("specialLabel");
+
+    if(service === "")
+    {
+        evaluationForm.style.display =
+        "none";
+
+        return;
+    }
+
+    evaluationForm.style.display =
+    "block";
+
+    specialQuestion.style.display =
+    "block";
+
+    // HỘ TỊCH
+    if(
+        service.includes("khai sinh") ||
+        service.includes("kết hôn") ||
+        service.includes("khai tử") ||
+        service.includes("hôn nhân")
+    )
+    {
+        specialLabel.innerHTML =
+        "Thông tin và giấy tờ hộ tịch được xử lý chính xác?";
+    }
+
+    // CHỨNG THỰC
+   else if(
+    service.toLowerCase().includes("chứng thực")
+)
+    {
+        specialLabel.innerHTML =
+        "Việc chứng thực được giải quyết nhanh chóng?";
+    }
+
+    // CƯ TRÚ
+    else if(
+        service.includes("thường trú") ||
+        service.includes("tạm trú") ||
+        service.includes("cư trú")
+    )
+    {
+        specialLabel.innerHTML =
+        "Thông tin cư trú được cập nhật kịp thời?";
+    }
+
+    // ĐẤT ĐAI
+    else if(
+        service.includes("đất")
+    )
+    {
+        specialLabel.innerHTML =
+        "Quy trình giải quyết hồ sơ đất đai minh bạch?";
+    }
+
+    // LAO ĐỘNG - XÃ HỘI
+    else if(
+        service.includes("hộ nghèo") ||
+        service.includes("trợ cấp") ||
+        service.includes("người có công") ||
+        service.includes("bảo trợ")
+    )
+    {
+        specialLabel.innerHTML =
+        "Cán bộ hướng dẫn chính sách đầy đủ và dễ hiểu?";
+    }
+
+    else
+    {
+        specialLabel.innerHTML =
+        "Anh/Chị hài lòng với chất lượng dịch vụ?";
+    }
+}
+
+
+function submitRating()
+{
+    const fullName =
+    document.getElementById("fullName").value.trim();
+
+    const phone =
+    document.getElementById("phone").value.trim();
+
+    const email =
+    document.getElementById("email").value.trim();
+
+    const service =
+    document.getElementById("service").value;
+
+    const attitude =
+    document.getElementById("attitude").value;
+
+    const timeProcess =
+    document.getElementById("timeProcess").value;
+
+    const guidance =
+    document.getElementById("guidance").value;
+
+    const convenience =
+    document.getElementById("convenience").value;
+
+    const onlineService =
+    document.getElementById("onlineService").value;
+
+    const specialAnswer =
+    document.getElementById("specialAnswer").value;
+
+    const comment =
+    document.getElementById("comment").value.trim();
+
+    const rating =
+    document.querySelector(
+        'input[name="rating"]:checked'
+    );
+
+    if(
+        fullName === "" ||
+        phone === "" ||
+        service === "" ||
+        !rating ||
+        attitude === "" ||
+        timeProcess === "" ||
+        guidance === ""
+    )
+    {
+        alert(
+            "Vui lòng điền đầy đủ các thông tin bắt buộc (*)"
+        );
+        return;
+    }
+
+    const ratings =
+    JSON.parse(
+        localStorage.getItem("ratings")
+    ) || [];
+
+    const ratingData =
+    {
+        fullName,
+        phone,
+        email,
+
+        service,
+
+        rating: rating.value,
+
+        attitude,
+        timeProcess,
+        guidance,
+        convenience,
+
+        onlineService,
+        specialAnswer,
+
+        comment,
+
+        date:
+        new Date().toLocaleDateString("vi-VN")
+    };
+
+    ratings.push(ratingData);
+
+    localStorage.setItem(
+        "ratings",
+        JSON.stringify(ratings)
+    );
+
+    alert(
+        "Cảm ơn Anh/Chị đã gửi đánh giá!"
+    );
+
+    document
+    .getElementById("ratingForm")
+    .reset();
+
+    document
+    .getElementById("evaluationForm")
+    .style.display =
+    "none";
+
+    document
+    .getElementById("specialQuestion")
+    .style.display =
+    "none";
+}

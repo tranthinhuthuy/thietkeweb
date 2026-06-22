@@ -1,0 +1,53 @@
+function updateDateTime(){
+     const datetimeElement =
+        document.getElementById("datetime");
+
+    // Nếu không có id="datetime" thì thoát
+    if (!datetimeElement) {
+        return;
+    }
+    const now = new Date();
+
+    const weekdays = [
+        "Chủ nhật",
+        "Thứ Hai",
+        "Thứ Ba",
+        "Thứ Tư",
+        "Thứ Năm",
+        "Thứ Sáu",
+        "Thứ Bảy"
+    ];
+
+    const day =
+    weekdays[now.getDay()];
+
+    const date =
+    now.getDate();
+
+    const month =
+    now.getMonth()+1;
+
+    const year =
+    now.getFullYear();
+
+    const hour =
+    String(now.getHours()).padStart(2,'0');
+
+    const minute =
+    String(now.getMinutes()).padStart(2,'0');
+
+    const second =
+    String(now.getSeconds()).padStart(2,'0');
+
+    document.getElementById(
+        "datetime"
+    ).innerHTML =
+
+    `${day},
+    ${date}/${month}/${year}
+    - ${hour}:${minute}:${second}`;
+}
+
+setInterval(updateDateTime,1000);
+
+updateDateTime();

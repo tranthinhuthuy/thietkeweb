@@ -1,0 +1,344 @@
+// ======================
+// CHUẨN HÓA TIẾNG VIỆT
+// ======================
+
+function removeVietnameseTones(str) {
+
+    return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D");
+}
+
+// ======================
+// TÌM KIẾM CHỨC NĂNG
+// ======================
+
+function searchPage() {
+
+    const input =
+        document.getElementById("searchInput");
+
+    if (!input) {
+        alert("Không tìm thấy ô tìm kiếm.");
+        return;
+    }
+
+    let keyword =
+        input.value
+            .trim()
+            .toLowerCase();
+
+    keyword =
+        removeVietnameseTones(keyword);
+
+    // TRANG CHỦ
+    if (
+        keyword.includes("trang chu") ||
+        keyword.includes("home")
+    ) {
+
+        window.location.href =
+            "index.html";
+    }
+
+    // THỦ TỤC
+    else if (
+        keyword.includes("thu tuc") ||
+        keyword.includes("tra cuu") ||
+        keyword.includes("ho so") ||
+        keyword.includes("khai sinh") ||
+        keyword.includes("ket hon") ||
+        keyword.includes("chung thuc") ||
+        keyword.includes("dat dai")
+    ) {
+
+        window.location.href =
+            "pages/procedures.html";
+    }
+
+    // BỐC SỐ
+    else if (
+        keyword.includes("boc so") ||
+        keyword.includes("lay so") ||
+        keyword.includes("xep hang")
+    ) {
+
+        window.location.href =
+            "pages/queue.html";
+    }
+
+    // PHẢN ÁNH
+    else if (
+        keyword.includes("phan anh") ||
+        keyword.includes("kien nghi") ||
+        keyword.includes("gop y")
+    ) {
+
+        window.location.href =
+            "pages/feedback.html";
+    }
+
+    // ĐÁNH GIÁ
+    else if (
+        keyword.includes("danh gia") ||
+        keyword.includes("hai long")
+    ) {
+
+        window.location.href =
+            "pages/rating.html";
+    }
+
+    else {
+
+        alert(
+            "Không tìm thấy chức năng phù hợp.\n\n" +
+            "Ví dụ:\n" +
+            "- Thủ tục\n" +
+            "- Bốc số online\n" +
+            "- Phản ánh kiến nghị\n" +
+            "- Đánh giá hài lòng"
+        );
+    }
+}
+
+// ======================
+// ENTER ĐỂ TÌM KIẾM
+// ======================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const input =
+            document.getElementById(
+                "searchInput"
+            );
+
+        if (input) {
+
+            input.addEventListener(
+                "keypress",
+                function (e) {
+
+                    if (e.key === "Enter") {
+
+                        searchPage();
+                    }
+                }
+            );
+        }
+    }
+);
+
+// ======================
+// HÀM HIỂN THỊ THÔNG BÁO
+// ======================
+
+function showVoiceStatus(message) {
+
+    const status =
+        document.getElementById(
+            "voice-status"
+        );
+
+    if (!status) return;
+
+    status.innerText =
+        message;
+
+    status.style.display =
+        "block";
+
+    clearTimeout(
+        status.hideTimer
+    );
+
+    status.hideTimer =
+        setTimeout(() => {
+
+            status.style.display =
+                "none";
+
+            status.innerText =
+                "";
+
+        }, 3000);
+}
+
+// ======================
+// TÌM KIẾM GIỌNG NÓI
+// ======================
+
+function startVoiceSearch() {
+
+    if (
+        !(
+            "webkitSpeechRecognition" in window ||
+            "SpeechRecognition" in window
+        )
+    ) {
+
+        showVoiceStatus(
+            "Trình duyệt không hỗ trợ nhận dạng giọng nói."
+        );
+
+        alert(
+            "Trình duyệt không hỗ trợ tìm kiếm bằng giọng nói.\n" +
+            "Hãy sử dụng Google Chrome hoặc Microsoft Edge."
+        );
+
+        return;
+    }
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang =
+        "vi-VN";
+
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
+    const mic =
+        document.querySelector(
+            ".mic-icon i"
+        );
+
+    // ======================
+    // BẮT ĐẦU NGHE
+    // ======================
+
+    recognition.onstart =
+        function () {
+
+            if (mic) {
+
+                mic.style.color =
+                    "#ff0000";
+            }
+
+            showVoiceStatus(
+                "🎙 Đang lắng nghe..."
+            );
+        };
+
+    // ======================
+    // NHẬN KẾT QUẢ
+    // ======================
+
+    recognition.onresult =
+        function (event) {
+
+            const text =
+                event.results[0][0]
+                    .transcript;
+
+            const input =
+                document.getElementById(
+                    "searchInput"
+                );
+
+            if (input) {
+
+                input.value =
+                    text;
+
+                input.focus();
+            }
+
+            if (mic) {
+
+                mic.style.color =
+                    "#999";
+            }
+
+            showVoiceStatus(
+                "Đã nhận: " + text
+            );
+
+            setTimeout(() => {
+
+                searchPage();
+
+            }, 500);
+        };
+
+    // ======================
+    // XỬ LÝ LỖI
+    // ======================
+
+    recognition.onerror =
+        function (event) {
+
+            if (mic) {
+
+                mic.style.color =
+                    "#999";
+            }
+
+            let message = "";
+
+            switch (
+                event.error
+            ) {
+
+                case "no-speech":
+
+                    message =
+                        "Không phát hiện giọng nói. Vui lòng nói lại.";
+                    break;
+
+                case "audio-capture":
+
+                    message =
+                        "Không tìm thấy microphone.";
+                    break;
+
+                case "not-allowed":
+
+                    message =
+                        "Bạn chưa cấp quyền sử dụng microphone.";
+                    break;
+
+                case "network":
+
+                    message =
+                        "Lỗi kết nối mạng.";
+                    break;
+
+                default:
+
+                    message =
+                        "Không thể nhận diện giọng nói.";
+            }
+
+            showVoiceStatus(
+                message
+            );
+        };
+
+    // ======================
+    // KẾT THÚC
+    // ======================
+
+    recognition.onend =
+        function () {
+
+            if (mic) {
+
+                mic.style.color =
+                    "#999";
+            }
+        };
+
+    recognition.start();
+}

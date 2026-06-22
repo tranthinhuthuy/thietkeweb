@@ -1,0 +1,544 @@
+// ==============================
+// KHỞI TẠO TRANG QUẢN TRỊ
+// ==============================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Khởi tạo tài khoản mặc định
+    initAdminAccounts();
+
+    // Kiểm tra đăng nhập
+    const adminLogin = sessionStorage.getItem("adminLogin");
+
+    if (adminLogin !== "true") {
+        openAuthModal();
+    }
+
+    checkAdminLogin();
+    loadDashboard();
+    updateDateTime();
+
+    setInterval(updateDateTime, 1000);
+
+    // Enter search
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+        searchInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                searchFeedback();
+            }
+        });
+    }
+
+    // Click ngoài modal để đóng
+    window.onclick = function (event) {
+        const modal = document.getElementById("authModal");
+        if (modal && event.target === modal) {
+            closeAuthModal();
+        }
+    };
+});
+
+
+// ==============================
+// KHỞI TẠO ADMIN USERS
+// ==============================
+
+function initAdminAccounts() {
+    const defaultUsers = [
+        { username: "admin", password: "Abc123456@", role: "Quản trị hệ thống" },
+        { username: "chutich", password: "123456", role: "Chủ tịch UBND" },
+        { username: "phochutich", password: "123456", role: "Phó Chủ tịch UBND" },
+        { username: "vanthu", password: "123456", role: "Văn thư" },
+        { username: "cntt", password: "123456", role: "Công chức CNTT" }
+    ];
+
+    try {
+        const stored = localStorage.getItem("users");
+
+        // Nếu chưa có dữ liệu hoặc bị lỗi JSON → reset lại
+        if (!stored) {
+            localStorage.setItem("users", JSON.stringify(defaultUsers));
+            return;
+        }
+
+        const users = JSON.parse(stored);
+
+        if (!Array.isArray(users)) {
+            localStorage.setItem("users", JSON.stringify(defaultUsers));
+            return;
+        }
+
+        // Kiểm tra có thiếu admin không → tự bổ sung
+        const hasAdmin = users.some(u => u.username === "admin");
+
+        if (!hasAdmin) {
+            users.push(defaultUsers[0]);
+            localStorage.setItem("users", JSON.stringify(users));
+        }
+
+    } catch (error) {
+        // Nếu localStorage bị lỗi → reset toàn bộ
+        localStorage.setItem("users", JSON.stringify(defaultUsers));
+    }
+}
+
+// ==============================
+// DASHBOARD
+// ==============================
+
+function loadDashboard() {
+    if (typeof loadFeedback === "function") loadFeedback();
+    if (typeof loadRating === "function") loadRating();
+    if (typeof loadUsers === "function") loadUsers();
+}
+
+
+// ==============================
+// FEEDBACK
+// ==============================
+
+function loadFeedback() {
+    const feedbacks = JSON.parse(localStorage.getItem("feedbacks")) || [];
+
+    const total = document.getElementById("totalFeedback");
+    if (total) total.textContent = feedbacks.length;
+
+    const table = document.getElementById("feedbackTable");
+    if (!table) return;
+
+    table.innerHTML = "";
+
+    feedbacks.forEach(item => {
+        table.innerHTML += `
+        <tr>
+            <td>${item.fullName || ""}</td>
+            <td>${item.phone || ""}</td>
+            <td>${item.email || ""}</td>
+            <td>${item.feedbackType || ""}</td>
+            <td>${item.content || ""}</td>
+            <td>${item.date || ""}</td>
+        </tr>`;
+    });
+}
+
+
+// ==============================
+// RATING
+// ==============================
+
+function loadRating() {
+    const ratings = JSON.parse(localStorage.getItem("ratings")) || [];
+
+    const total = document.getElementById("totalRating");
+    if (total) total.textContent = ratings.length;
+
+    const fiveStar = ratings.filter(i => Number(i.rating) === 5).length;
+
+    const fiveStarEl = document.getElementById("fiveStar");
+    if (fiveStarEl) fiveStarEl.textContent = fiveStar;
+
+    const table = document.getElementById("ratingTable");
+    if (!table) return;
+
+    table.innerHTML = "";
+
+    ratings.forEach(item => {
+        table.innerHTML += `
+        <tr>
+            <td>${item.fullName || ""}</td>
+            <td>${item.rating || ""} ⭐</td>
+            <td>${item.comment || ""}</td>
+            <td>${item.date || ""}</td>
+        </tr>`;
+    });
+}
+
+
+// ==============================
+// USERS
+// ==============================
+
+function loadUsers() {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    const total = document.getElementById("totalUser");
+    if (total) total.textContent = users.length;
+}
+
+
+// ==============================
+// SEARCH
+// ==============================
+
+function searchFeedback() {
+    const keyword = document.getElementById("searchInput").value.toLowerCase().trim();
+
+    if (!keyword) return;
+
+    if (keyword.includes("thống kê")) {
+        document.getElementById("dashboard")?.scrollIntoView({ behavior: "smooth" });
+        return;
+    }
+
+    if (keyword.includes("phản ánh")) {
+        document.getElementById("feedback-section")?.scrollIntoView({ behavior: "smooth" });
+        return;
+    }
+
+    if (keyword.includes("đánh giá")) {
+        document.getElementById("rating-section")?.scrollIntoView({ behavior: "smooth" });
+        return;
+    }
+
+    if (keyword.includes("biểu mẫu")) {
+        document.getElementById("forms-section")?.scrollIntoView({ behavior: "smooth" });
+        return;
+    }
+
+    // filter table feedback
+    document.querySelectorAll("#feedbackTable tr").forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(keyword) ? "" : "none";
+    });
+
+    // filter table rating
+    document.querySelectorAll("#ratingTable tr").forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(keyword) ? "" : "none";
+    });
+}
+
+
+// ==============================
+// VOICE SEARCH
+// ==============================
+
+function startVoiceSearch() {
+    if (!("webkitSpeechRecognition" in window)) {
+        alert("Trình duyệt không hỗ trợ tìm kiếm giọng nói");
+        return;
+    }
+
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = "vi-VN";
+    recognition.start();
+
+    recognition.onresult = function (event) {
+        const result = event.results[0][0].transcript;
+        document.getElementById("searchInput").value = result;
+        searchFeedback();
+    };
+}
+
+
+// ==============================
+// MENU MOBILE
+// ==============================
+
+function toggleMenu() {
+    document.getElementById("navbar")?.classList.toggle("active");
+}
+
+
+// ==============================
+// CLOCK
+// ==============================
+
+function updateDateTime() {
+    const now = new Date();
+
+    const days = ["Chủ nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"];
+
+    const thu = days[now.getDay()];
+    const dd = String(now.getDate()).padStart(2, "0");
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const yyyy = now.getFullYear();
+
+    const hh = String(now.getHours()).padStart(2, "0");
+    const min = String(now.getMinutes()).padStart(2, "0");
+    const ss = String(now.getSeconds()).padStart(2, "0");
+
+    const el = document.getElementById("datetime");
+    if (el) {
+        el.innerHTML = `${thu}, ${dd}/${mm}/${yyyy} &nbsp;|&nbsp; ${hh}:${min}:${ss}`;
+    }
+}
+
+
+// ==============================
+// LOGOUT
+// ==============================
+
+function logoutAdmin() {
+    if (confirm("Bạn có muốn đăng xuất?")) {
+        sessionStorage.removeItem("adminLogin");
+        sessionStorage.removeItem("currentUser");
+
+        alert("Đã đăng xuất thành công");
+        location.reload();
+    }
+}
+
+
+// ==============================
+// CHECK LOGIN
+// ==============================
+
+function checkAdminLogin() {
+    const adminLogin = sessionStorage.getItem("adminLogin");
+    const currentUser = sessionStorage.getItem("currentUser");
+
+    const text = document.getElementById("authText");
+    const btn = document.getElementById("authButton");
+
+    if (!text || !btn) return;
+
+    if (adminLogin === "true") {
+        text.textContent = currentUser ? `${currentUser} | Đăng xuất` : "Đăng xuất";
+        btn.onclick = logoutAdmin;
+    } else {
+        text.textContent = "Đăng nhập";
+        btn.onclick = openAuthModal;
+    }
+}
+
+
+// ==============================
+// MODAL LOGIN
+// ==============================
+
+function openAuthModal() {
+    document.getElementById("authModal")?.style && (document.getElementById("authModal").style.display = "block");
+}
+
+function closeAuthModal() {
+    document.getElementById("authModal")?.style && (document.getElementById("authModal").style.display = "none");
+}
+
+ // ==============================
+// LOGIN
+// ==============================
+
+function loginAdmin() {
+    const usernameInput = document.getElementById("loginUser");
+    const passwordInput = document.getElementById("loginPass");
+
+    const username = usernameInput.value.trim().toLowerCase();
+    const password = passwordInput.value.trim();
+
+    if (!username || !password) {
+        alert("Vui lòng nhập đầy đủ thông tin");
+        return;
+    }
+
+    let users = [];
+
+    try {
+        users = JSON.parse(localStorage.getItem("users")) || [];
+    } catch (error) {
+        console.error("Lỗi dữ liệu users:", error);
+        alert("Dữ liệu người dùng bị lỗi!");
+        return;
+    }
+
+    const found = users.find(u =>
+        (u.username || "").toLowerCase() === username &&
+        u.password === password
+    );
+
+    if (found) {
+        // ==============================
+        // LƯU SESSION LOGIN
+        // ==============================
+        sessionStorage.setItem("adminLogin", "true");
+
+        sessionStorage.setItem("currentUser", JSON.stringify({
+            username: found.username,
+            role: found.role
+        }));
+
+        alert("Đăng nhập thành công\n" + found.role);
+
+        // reset input
+        usernameInput.value = "";
+        passwordInput.value = "";
+
+        closeAuthModal();
+
+        if (typeof checkAdminLogin === "function") {
+            checkAdminLogin();
+        }
+
+        location.reload();
+    } else {
+        alert("Sai tên đăng nhập hoặc mật khẩu");
+    }
+}
+
+
+// ==============================
+// SEARCH WRAPPER
+// ==============================
+
+function searchPage() {
+    searchFeedback();
+}
+/* ==========================
+   TÌM KIẾM MENU ADMIN
+========================== */
+
+function removeVietnameseTones(str) {
+
+    return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D")
+        .toLowerCase();
+
+}
+
+function searchPage() {
+
+    const keyword =
+        removeVietnameseTones(
+            document.getElementById("searchInput").value
+        );
+
+    if (keyword === "") {
+
+        alert("Vui lòng nhập từ khóa tìm kiếm!");
+        return;
+
+    }
+
+    const menuItems = [
+
+        {
+            keyword: "trang chu",
+            link: "index.html"
+        },
+
+        {
+            keyword: "phan anh",
+            link: "feedback.html"
+        },
+
+        {
+            keyword: "danh gia",
+            link: "rating.html"
+        },
+
+        {
+            keyword: "bieu mau",
+            link: "forms.html"
+        },
+
+        {
+            keyword: "thu tuc",
+            link: "procedures.html"
+        },
+
+        {
+            keyword: "tai khoan",
+            link: "users.html"
+        }
+
+    ];
+
+    const result = menuItems.find(item =>
+        item.keyword.includes(keyword)
+    );
+
+    if (result) {
+
+        window.location.href = result.link;
+
+    } else {
+
+        alert("Không tìm thấy kết quả!");
+
+    }
+
+}
+
+
+/* ==========================
+   ENTER ĐỂ TÌM KIẾM
+========================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const input =
+        document.getElementById("searchInput");
+
+    if (input) {
+
+        input.addEventListener("keypress", function(e) {
+
+            if (e.key === "Enter") {
+
+                searchPage();
+
+            }
+
+        });
+
+    }
+
+});
+
+
+/* ==========================
+   TÌM KIẾM BẰNG GIỌNG NÓI
+========================== */
+
+function startVoiceSearch() {
+
+    if (!('webkitSpeechRecognition' in window)) {
+
+        alert(
+            "Trình duyệt không hỗ trợ tìm kiếm bằng giọng nói!"
+        );
+
+        return;
+
+    }
+
+    const recognition =
+        new webkitSpeechRecognition();
+
+    recognition.lang = "vi-VN";
+
+    recognition.start();
+
+    recognition.onresult = function(event) {
+
+        const text =
+            event.results[0][0].transcript;
+
+        document.getElementById("searchInput")
+            .value = text;
+
+        searchPage();
+
+    };
+
+    recognition.onerror = function() {
+
+        alert(
+            "Không nghe rõ giọng nói. Vui lòng thử lại!"
+        );
+
+    };
+
+    recognition.onnomatch = function() {
+
+        alert(
+            "Không nhận diện được giọng nói!"
+        );
+
+    };
+
+}

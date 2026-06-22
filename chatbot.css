@@ -1,0 +1,33 @@
+const db = require("../config/db");
+
+exports.createRating =
+async(req,res)=>{
+
+try{
+
+const {stars,comment}
+= req.body;
+
+await db.execute(
+
+`
+INSERT INTO ratings
+(stars,comment)
+VALUES (?,?)
+`,
+
+[stars,comment]
+
+);
+
+res.json({
+success:true
+});
+
+}catch(error){
+
+res.status(500).json(error);
+
+}
+
+};

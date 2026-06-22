@@ -1,0 +1,44 @@
+async function registerQueue(){
+
+const fullname =
+document.getElementById("fullname").value;
+
+const phone =
+document.getElementById("phone").value;
+
+const service_type =
+document.getElementById("service").value;
+
+const response =
+await fetch(
+"http://localhost:3000/api/queues",
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+fullname,
+phone,
+service_type
+})
+}
+);
+
+const data =
+await response.json();
+
+document.getElementById(
+"queue-result"
+).innerHTML =
+
+`
+<h3>
+Số thứ tự của bạn:
+${data.queueNumber}
+</h3>
+`;
+
+}

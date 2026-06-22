@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quản lý biểu mẫu</title>
+
+    <link rel="stylesheet" href="admin.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="js/forms.js" defer></script>
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="admin-header">
+
+        <h1>
+            <i class="fa-solid fa-file-lines"></i>
+            Quản lý biểu mẫu
+        </h1>
+
+        <div class="admin-actions">
+
+            <button onclick="location.href='admin.html'">
+
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- NỘI DUNG -->
+
+    <div class="management-container">
+
+        <!-- TIÊU ĐỀ -->
+
+        <div class="management-header">
+
+            <h2>
+                Danh sách biểu mẫu hành chính
+            </h2>
+
+            <p>
+                Quản lý biểu mẫu phục vụ người dân tại Trung tâm Phục vụ Hành chính công.
+            </p>
+
+        </div>
+
+        <!-- THỐNG KÊ -->
+
+        <section class="stats">
+
+            <div class="dashboard">
+
+                <div class="card">
+
+                    <h3>Tổng biểu mẫu</h3>
+
+                    <span id="totalForms">
+                        0
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- THANH CÔNG CỤ -->
+
+        <section class="toolbar-section">
+
+            <div class="toolbar">
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="🔍 Tìm kiếm biểu mẫu...">
+
+                    <button
+                        class="search-btn"
+                        onclick="searchForm()">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Tìm kiếm
+
+                    </button>
+
+                </div>
+
+                <button
+                    class="add-btn"
+                    onclick="openFormModal()">
+
+                    <i class="fa-solid fa-plus"></i>
+                    Thêm biểu mẫu
+
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- DANH SÁCH BIỂU MẪU -->
+
+        <section class="table-section">
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>STT</th>
+
+                            <th>Tên biểu mẫu</th>
+
+                            <th>Lĩnh vực</th>
+
+                            <th>Tên file</th>
+
+                            <th>Ngày cập nhật</th>
+
+                            <th>Thao tác</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="formsTable">
+
+                        <tr>
+
+                            <td colspan="6"
+                                style="text-align:center">
+
+                                Chưa có biểu mẫu nào
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- FORM THÊM / SỬA BIỂU MẪU -->
+
+    <div id="formModal" class="modal">
+
+        <div class="modal-content">
+
+            <span
+                class="close"
+                onclick="closeFormModal()">
+
+                &times;
+
+            </span>
+
+            <h2 id="formTitle">
+
+                <i class="fa-solid fa-file-circle-plus"></i>
+                Thêm biểu mẫu
+
+            </h2>
+
+            <div class="form-container">
+
+                <!-- TÊN BIỂU MẪU -->
+
+                <label>
+                Tệp biểu mẫu
+                    <span style="color:red">*</span>
+                </label>
+
+    <input
+    type="file"
+    id="formFile"
+    accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
+<p id="selectedFileName" class="file-name">
+    Chưa chọn tệp
+</p>
+<label>
+    Tên biểu mẫu
+    <span style="color:red">*</span>
+</label>
+
+<input
+    type="text"
+    id="formName"
+    placeholder="Ví dụ: Đơn đăng ký khai sinh">
+                <!-- LĨNH VỰC -->
+
+                <label>
+
+                    Lĩnh vực
+                    <span style="color:red">*</span>
+
+                </label>
+
+                <select id="formCategory">
+
+                    <option value="Hộ tịch">
+                        Hộ tịch
+                    </option>
+
+                    <option value="Cư trú">
+                        Cư trú
+                    </option>
+
+                    <option value="Đất đai">
+                        Đất đai
+                    </option>
+
+                    <option value="Lao động - Xã hội">
+                        Lao động - Xã hội
+                    </option>
+
+                    <option value="Hành chính">
+                        Hành chính
+                    </option>
+
+                </select>
+
+                <!-- FILE -->
+
+                <label>
+
+                    Tên file
+                    <span style="color:red">*</span>
+
+                </label>
+
+                <input
+                    type="text"
+                    id="formFile"
+                    placeholder="Ví dụ: don-dang-ky-khai-sinh.docx">
+
+                <!-- MÔ TẢ -->
+
+                <label>
+
+                    Mô tả biểu mẫu
+
+                </label>
+
+                <textarea
+                    id="formDescription"
+                    rows="5"
+                    placeholder="Nhập mô tả biểu mẫu">
+                </textarea>
+
+                <!-- NÚT CHỨC NĂNG -->
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="add-btn"
+                        onclick="saveForm()">
+
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Lưu biểu mẫu
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        onclick="closeFormModal()">
+
+                        <i class="fa-solid fa-xmark"></i>
+                        Hủy
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <h3>
+
+            TRANG THÔNG TIN ĐIỆN TỬ
+            TRUNG TÂM HÀNH CHÍNH CÔNG
+            UBND XÃ ĐĂK HÀ
+
+        </h3>
+
+        <p>
+            Chịu trách nhiệm:
+            UBND XÃ ĐĂK HÀ
+        </p>
+
+        <p>
+            Điện thoại:
+            02553856504
+        </p>
+
+        <p>
+            Địa chỉ:
+            Xã Đăk Hà, tỉnh Quảng Ngãi
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

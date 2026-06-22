@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quản lý phản ánh</title>
+
+<link rel="stylesheet" href="admin.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="feedback.js" defer></script>
+
+</head>
+
+<body>
+
+<header>
+
+  <!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quản lý phản ánh kiến nghị</title>
+
+<link rel="stylesheet" href="admin.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<script src="feedback.js" defer></script>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header class="admin-header">
+
+<h1>
+    <i class="fa-solid fa-comments"></i>
+    Quản lý phản ánh kiến nghị
+</h1>
+
+<div class="admin-actions">
+
+    <button
+        onclick="location.href='index.html'">
+
+        <i class="fa-solid fa-house"></i>
+
+        Dashboard
+
+    </button>
+
+</div>
+
+</header>
+
+<!-- FORM QUẢN LÝ LỚN -->
+
+<div class="management-container">
+
+<div class="management-header">
+
+    <h2>
+        Danh sách phản ánh của người dân
+    </h2>
+
+    <p>
+        Theo dõi, xử lý và quản lý các phản ánh, kiến nghị gửi đến Trung tâm Phục vụ Hành chính công.
+    </p>
+
+</div>
+
+<!-- THỐNG KÊ -->
+
+<section class="stats">
+
+    <div class="dashboard">
+
+        <div class="card">
+
+            <h3>Tổng phản ánh</h3>
+
+            <span id="totalFeedback">
+                0
+            </span>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Chưa xử lý</h3>
+
+            <span id="pendingFeedback">
+                0
+            </span>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Đang xử lý</h3>
+
+            <span id="processingFeedback">
+                0
+            </span>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Đã xử lý</h3>
+
+            <span id="doneFeedback">
+                0
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- THANH CÔNG CỤ -->
+
+<section class="toolbar-section">
+
+    <div class="toolbar">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Tìm theo họ tên, SĐT, nội dung phản ánh...">
+
+        <select id="statusFilter">
+
+            <option value="">
+                Tất cả trạng thái
+            </option>
+
+            <option value="pending">
+                Chưa xử lý
+            </option>
+
+            <option value="processing">
+                Đang xử lý
+            </option>
+
+            <option value="done">
+                Đã xử lý
+            </option>
+
+        </select>
+
+        <button>
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            Tìm kiếm
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- BẢNG PHẢN ÁNH -->
+
+<section class="table-section">
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>STT</th>
+
+                    <th>Họ tên</th>
+
+                    <th>SĐT</th>
+
+                    <th>Email</th>
+
+                    <th>Loại phản ánh</th>
+
+                    <th>Nội dung</th>
+
+                    <th>Ngày gửi</th>
+
+                    <th>Trạng thái</th>
+
+                    <th>Thao tác</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="feedbackTable">
+
+                <!-- Dữ liệu sinh bằng JavaScript -->
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+<h3>
+    TRANG THÔNG TIN ĐIỆN TỬ
+    TRUNG TÂM HÀNH CHÍNH CÔNG
+    UBND XÃ ĐĂK HÀ
+</h3>
+
+<p>
+    Chịu trách nhiệm: UBND XÃ ĐĂK HÀ
+</p>
+
+<p>
+    Điện thoại: 02553856504
+</p>
+
+<p>
+    Địa chỉ: Xã Đăk Hà, tỉnh Quảng Ngãi
+</p>
+
+
+</footer>
+
+</body>
+
+</html>
+
+
+</body>
+
+</html>
